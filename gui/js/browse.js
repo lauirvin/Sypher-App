@@ -30,3 +30,11 @@ function previewImage(input) {
   };
   reader.readAsDataURL(event.target.files[0]);
 }
+
+function readFileName(input) {
+  var files = input.files;
+  for (var i = 0; i < files.length; i++) {
+    var output = document.getElementById("file-name");
+    output.innerHTML = files[i].name;
+  }
+}
