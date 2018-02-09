@@ -3,7 +3,7 @@ function encodeEmptyUpload() {
     document.getElementById("next").style.backgroundColor = "#c0c0c0";
     document.getElementById("link").href = "";
   } else {
-    document.getElementById("next").style.backgroundColor = "#535ae8";
+    document.getElementById("next").style.backgroundColor = "#35B0AB";
     document.getElementById("link").href = "./encode_download.html";
   }
   window.setTimeout("encodeEmptyUpload();", 1000 * 0.1);
@@ -14,7 +14,7 @@ function decodeEmptyUpload() {
     document.getElementById("next").style.backgroundColor = "#c0c0c0";
     document.getElementById("link").href = "";
   } else {
-    document.getElementById("next").style.backgroundColor = "#e88e53";
+    document.getElementById("next").style.backgroundColor = "#DD8968";
     document.getElementById("link").href = "./decode_download.html";
   }
   window.setTimeout("decodeEmptyUpload();", 1000 * 0.1);
