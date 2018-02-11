@@ -60,18 +60,8 @@ void steganography::encode_bitstring(boost::dynamic_bitset<>& bitstring) {
 
     int index = 0;
     for (int row = 0; row < this -> image.rows; row++) {
-        if (index == bitstring_length.to_ulong() + 32) {
-            break;
-        }
         for (int col = 0; col < this -> image.cols; col++) {
-            if (index == bitstring_length.to_ulong() + 32) {
-                break;
-            }
             for (int cha = 0; cha < this -> image.channels(); cha++) {
-                if (index == bitstring_length.to_ulong() + 32) {
-                    break;
-                }
-
                 if (index < 32) {
                     if (this -> image.channels() == 3) {
                         this -> set_lsb(&this -> image.at<cv::Vec3b>(row, col)[cha], bitstring_length.test(index));
@@ -87,36 +77,31 @@ void steganography::encode_bitstring(boost::dynamic_bitset<>& bitstring) {
                 }
 
                 index++;
+
+                if (index == bitstring_length.to_ulong() + 32) {
+                    if (this -> image_path.parent_path().string().size() <= 0) {
+                        cv::imwrite(this -> image_path.parent_path().string() + "steg-" + this -> image_path.filename().string(), this -> image);
+                    } else {
+                        cv::imwrite(this -> image_path.parent_path().string() + "/" + "steg-" + this -> image_path.filename().string(), this -> image);
+                    }
+
+                    return;
+                }
             }
         }
-    }
-
-    if (this -> image_path.parent_path().string().size() <= 0) {
-        cv::imwrite(this -> image_path.parent_path().string() + "steg-" + this -> image_path.filename().string(), this -> image);
-    } else {
-        cv::imwrite(this -> image_path.parent_path().string() + "/" + "steg-" + this -> image_path.filename().string(), this -> image);
     }
 };
 
 // Decode a binary string from an image using the 32bit number at the beginning to determine when to stop looping through the pixel (This saves alot of time)
 boost::dynamic_bitset<> steganography::decode_bitstring() {
-    unsigned int index = 0;
-    unsigned int length = 32;
     std::bitset<32> bitstring_length;
     boost::dynamic_bitset<> bitstring;
 
+    unsigned int index = 0;
+    unsigned int length = 32;
     for (int row = 0; row < this -> image.rows; row++) {
-        if (index == length) {
-            break;
-        }
         for (int col = 0; col < this -> image.cols; col++) {
-            if (index == length) {
-                break;
-            }
             for (int cha = 0; cha < this -> image.channels(); cha++) {
-                if (index == length) {
-                    break;
-                }
                 if (index < 32) {
                     if (this -> image.channels() == 3) {
                         bitstring_length.set(index, this -> get_lsb(this -> image.at<cv::Vec3b>(row, col)[cha]));
@@ -137,11 +122,13 @@ boost::dynamic_bitset<> steganography::decode_bitstring() {
                 }
 
                 index++;
+
+                if (index == length) {
+                    return bitstring;
+                }
             }
         }
     }
-
-    return bitstring;
 };
 
 // Load a file into a binary string (dynamic_bitset<>)
