@@ -18,7 +18,7 @@ INC_LST = $(wildcard $(SRC_DIR)/*.$(INC_EXT))
 OBJ_LST = $(SRC_LST:$(SRC_DIR)/%.$(SRC_EXT)=$(BUILD_DIR)/%.o)
 
 MKDIR = mkdir --parent
-RM = rm -f
+RM = rm -rf
 
 $(BIN_DIR)/$(TARGET) : $(OBJ_LST)
 	@$(MKDIR) $(BIN_DIR)
@@ -41,6 +41,7 @@ clean:
 
 .PHONY: remove
 remove: clean
-	@$(RM) "src/argparse.hpp"
-	@$(RM) $(BIN_DIR)/$(TARGET)
+	@$(RM) "src/optparse.hpp"
+	@$(RM) $(BUILD_DIR)
+	@$(RM) $(BIN_DIR)
 	@echo "Executable removed!"

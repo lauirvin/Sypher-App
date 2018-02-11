@@ -2,8 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <vector>
 
+#include <boost/dynamic_bitset.hpp>
 #include <boost/filesystem.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -32,22 +32,23 @@ class steganography {
         boost::filesystem::path image_path;
         unsigned int image_size;
 
-        // load/save file to/from a bitstring (std::vector<bool>)
-        std::vector<bool> load_file(const boost::filesystem::path&);
-        void save_file(const std::string&, const std::vector<bool>&);
+        // load/save file to/from a bitstring (boost::dynamic_bitset<>)
+        boost::dynamic_bitset<> load_file(const boost::filesystem::path&);
+        void save_file(const std::string&, const boost::dynamic_bitset<>&);
 
-        // encode/decode bitstrings (std::vector<bool>) to/from and image
-        void encode_bitstring(std::vector<bool>&);
-        std::vector<bool> decode_bitstring();
+        // encode/decode bitstrings (boost::dynamic_bitset<>) to/from and image
+        void encode_bitstring(boost::dynamic_bitset<>&);
+        boost::dynamic_bitset<> decode_bitstring();
 
         // bit manipulation
         inline unsigned char get_lsb(const unsigned char&);
         inline void set_lsb(unsigned char*, const bool&);
 
         // filename encoding/decoding
-        std::vector<bool> encode_filename(const std::string&);
-        std::string decode_filename(const std::vector<bool>&);
+        boost::dynamic_bitset<> encode_filename(const std::string&);
+        std::string decode_filename(const boost::dynamic_bitset<>&);
 
         // string/binary conversion
-        std::string binary_to_string(const std::vector<bool>&);
+        boost::dynamic_bitset<> string_to_binary(const std::string&);
+        std::string binary_to_string(const boost::dynamic_bitset<>&);
 };
