@@ -37,8 +37,8 @@ class steganography {
         void save_file(const boost::filesystem::path&, const boost::dynamic_bitset<>&);
 
         // encode/decode bitstrings (boost::dynamic_bitset<>) to/from and image
-        void encode_bitstring(boost::dynamic_bitset<>&);
-        boost::dynamic_bitset<> decode_bitstring(int, int);
+        void encode_bitstring(const unsigned int&, const unsigned int&, const boost::dynamic_bitset<>&);
+        boost::dynamic_bitset<> decode_bitstring(unsigned int, unsigned int);
 
         // bit manipulation
         inline unsigned char get_lsb(const unsigned char&);
