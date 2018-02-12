@@ -33,19 +33,19 @@ class steganography {
         unsigned int image_size;
 
         // load/save file to/from a bitstring (boost::dynamic_bitset<>)
-        boost::dynamic_bitset<> load_file(const boost::filesystem::path&);
-        void save_file(const std::string&, const boost::dynamic_bitset<>&);
+        void load_file(boost::dynamic_bitset<>*, const boost::filesystem::path&);
+        void save_file(const boost::filesystem::path&, const boost::dynamic_bitset<>&);
 
         // encode/decode bitstrings (boost::dynamic_bitset<>) to/from and image
         void encode_bitstring(boost::dynamic_bitset<>&);
-        boost::dynamic_bitset<> decode_bitstring();
+        boost::dynamic_bitset<> decode_bitstring(int, int);
 
         // bit manipulation
         inline unsigned char get_lsb(const unsigned char&);
         inline void set_lsb(unsigned char*, const bool&);
 
         // filename encoding/decoding
-        boost::dynamic_bitset<> encode_filename(const std::string&);
+        void encode_filename(boost::dynamic_bitset<>*, const std::string&);
         std::string decode_filename(const boost::dynamic_bitset<>&);
 
         // string/binary conversion

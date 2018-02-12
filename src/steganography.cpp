@@ -15,37 +15,23 @@
 
 // Produce a string the string of binary detailed in the breakdown above ^^ and encode it in the image using 'encode_bitstring'
 void steganography::encode_file(const boost::filesystem::path& file_path) {
-    boost::dynamic_bitset<> bitstring = this -> encode_filename(file_path.filename().string());
-    boost::dynamic_bitset<> file_data = this -> load_file(file_path);
-
-    for (int i = 0; i < file_data.size(); i++) {
-        bitstring.push_back(file_data.test(i));
-    }
-
+    boost::dynamic_bitset<> bitstring;
+    this -> encode_filename(&bitstring, file_path.filename().string());
+    this -> load_file(&bitstring, file_path);
     this -> encode_bitstring(bitstring);
 };
 
 // Decode the file from the image by doing the inverse of the breakdown at the beginning of this file.
 void steganography::decode_file() {
-    boost::dynamic_bitset<> bitstring = this -> decode_bitstring();
-    std::string filename;
-    boost::dynamic_bitset<> bitstring_file_data;
-
-    try {
-        filename = this -> decode_filename(bitstring);
-
-        for (unsigned int i = 32 + filename.size() * 8; i < bitstring.size(); i++) {
-            bitstring_file_data.push_back(bitstring.test(i));
-        }
-    } catch (std::out_of_range) {
-        std::cerr << "There doesn't appear to be an file stored in this image" << std::endl;
-        exit(1);
-    }
+    boost::dynamic_bitset<> bitstring_length = this -> decode_bitstring(0, 32);
+    boost::dynamic_bitset<> bitstring_filename_length = this -> decode_bitstring(32, 64);
+    boost::dynamic_bitset<> bitstring_filename = this -> decode_bitstring(64, 64 + bitstring_filename_length.to_ulong());
+    boost::dynamic_bitset<> bitstring_filedata = this -> decode_bitstring(64 + bitstring_filename_length.to_ulong(), bitstring_length.to_ulong() + 32);
 
     if (this -> image_path.parent_path().string().size() <= 0) {
-        this -> save_file(this -> image_path.parent_path().string() + "steg-" + filename, bitstring_file_data);
+        this -> save_file(this -> image_path.parent_path().string() + "steg-" + this -> binary_to_string(bitstring_filename), bitstring_filedata);
     } else {
-        this -> save_file(this -> image_path.parent_path().string() + "/" + "steg-" + filename,  bitstring_file_data);
+        this -> save_file(this -> image_path.parent_path().string() + "/steg-" + this -> binary_to_string(bitstring_filename), bitstring_filedata);
     }
 };
 
@@ -58,7 +44,7 @@ void steganography::encode_bitstring(boost::dynamic_bitset<>& bitstring) {
         exit(1);
     }
 
-    int index = 0;
+    unsigned int index = 0;
     for (int row = 0; row < this -> image.rows; row++) {
         for (int col = 0; col < this -> image.cols; col++) {
             for (int cha = 0; cha < this -> image.channels(); cha++) {
@@ -82,7 +68,7 @@ void steganography::encode_bitstring(boost::dynamic_bitset<>& bitstring) {
                     if (this -> image_path.parent_path().string().size() <= 0) {
                         cv::imwrite(this -> image_path.parent_path().string() + "steg-" + this -> image_path.filename().string(), this -> image);
                     } else {
-                        cv::imwrite(this -> image_path.parent_path().string() + "/" + "steg-" + this -> image_path.filename().string(), this -> image);
+                        cv::imwrite(this -> image_path.parent_path().string() + "/steg-" + this -> image_path.filename().string(), this -> image);
                     }
 
                     return;
@@ -92,28 +78,24 @@ void steganography::encode_bitstring(boost::dynamic_bitset<>& bitstring) {
     }
 };
 
-// Decode a binary string from an image using the 32bit number at the beginning to determine when to stop looping through the pixel (This saves alot of time)
-boost::dynamic_bitset<> steganography::decode_bitstring() {
-    std::bitset<32> bitstring_length;
+boost::dynamic_bitset<> steganography::decode_bitstring(int start, int end) {
     boost::dynamic_bitset<> bitstring;
 
     unsigned int index = 0;
-    unsigned int length = 32;
     for (int row = 0; row < this -> image.rows; row++) {
+        if (index == end) {
+            break;
+        }
         for (int col = 0; col < this -> image.cols; col++) {
+            if (index == end) {
+                break;
+            }
             for (int cha = 0; cha < this -> image.channels(); cha++) {
-                if (index < 32) {
-                    if (this -> image.channels() == 3) {
-                        bitstring_length.set(index, this -> get_lsb(this -> image.at<cv::Vec3b>(row, col)[cha]));
-                    } else {
-                        bitstring_length.set(index, this -> get_lsb(this -> image.at<cv::Vec4b>(row, col)[cha]));
-                    }
+                if (index == end) {
+                    break;
+                }
 
-                    if (index == 31) {
-                        length += bitstring_length.to_ulong();
-                    }
-
-                } else {
+                if (index >= start) {
                     if (this -> image.channels() == 3) {
                         bitstring.push_back(this -> get_lsb(this -> image.at<cv::Vec3b>(row, col)[cha]));
                     } else {
@@ -122,26 +104,23 @@ boost::dynamic_bitset<> steganography::decode_bitstring() {
                 }
 
                 index++;
-
-                if (index == length) {
-                    return bitstring;
-                }
             }
         }
     }
+
+    return bitstring;
 };
 
 // Load a file into a binary string (dynamic_bitset<>)
-boost::dynamic_bitset<> steganography::load_file(const boost::filesystem::path& file_path) {
+void steganography::load_file(boost::dynamic_bitset<>* bitstring, const boost::filesystem::path& file_path) {
     std::ifstream file(file_path.string(), std::ios::binary);
-    boost::dynamic_bitset<> bitstring;
 
     std::bitset<8> byte;
     if (file.good()) {
         while (!file.eof()) {
             byte = file.get();
             for (unsigned int i = 0; i < 8; i++) {
-                bitstring.push_back(byte.test(i));
+                bitstring -> push_back(byte.test(i));
             }
         }
     } else {
@@ -150,13 +129,11 @@ boost::dynamic_bitset<> steganography::load_file(const boost::filesystem::path& 
     }
 
     file.close();
-
-    return bitstring;
 };
 
 // This is the inverse of 'load_file'.
-void steganography::save_file(const std::string& file_name, const boost::dynamic_bitset<>& bitstring) {
-    std::ofstream file(file_name, std::ios::binary);
+void steganography::save_file(const boost::filesystem::path& file_path, const boost::dynamic_bitset<>& bitstring) {
+    std::ofstream file(file_path.string(), std::ios::binary);
 
     std::bitset<8> buffer;
     if (file.good()) {
@@ -189,37 +166,18 @@ inline void steganography::set_lsb(unsigned char* number, const bool& bit_value)
 };
 
 // Prepare the filename to be encoded into the image (prepend a 32bit numebr detailing how long the filename is)
-boost::dynamic_bitset<> steganography::encode_filename(const std::string& filename) {
-    boost::dynamic_bitset<> bitstring;
+void steganography::encode_filename(boost::dynamic_bitset<>* bitstring, const std::string& filename) {
     std::bitset<32> filename_length = filename.size() * 8;
 
     for (int i = 0; i < 32; i++) {
-        bitstring.push_back(filename_length.test(i));
+        bitstring -> push_back(filename_length.test(i));
     }
 
     boost::dynamic_bitset<> binary_filename = this -> string_to_binary(filename);
 
     for (int i = 0; i < binary_filename.size(); i++) {
-        bitstring.push_back(binary_filename.test(i));
+        bitstring -> push_back(binary_filename.test(i));
     }
-
-    return bitstring;
-};
-
-// This is the inverse of 'encode_filename'
-std::string steganography::decode_filename(const boost::dynamic_bitset<>& bitstring) {
-    boost::dynamic_bitset<> filename;
-    std::bitset<32> filename_length;
-
-    for (int i = 0; i < 32; i++) {
-        filename_length.set(i, bitstring.test(i));
-    }
-
-    for (unsigned int i = 32; i < filename_length.to_ulong() + 32; i++) {
-        filename.push_back(bitstring.test(i));
-    }
-
-    return this -> binary_to_string(filename);
 };
 
 // Convert a normal string into its binary representation
