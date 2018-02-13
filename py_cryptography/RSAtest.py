@@ -9,8 +9,13 @@ m == c^d (mod n)
 '''
 
 import math
+import random
 
-def RSA_keygen(p,q):
+def RSA_keygen():
+    primes = [i for i in range (10,50) if isPrime(i)]
+    p = random.choice(primes)
+    primes.remove(p)
+    q = random.choice(primes)
     n = p * q
     z = (p-1)*(q-1)
     e_candidates = range(2,z-1)
