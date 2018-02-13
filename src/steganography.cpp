@@ -48,16 +48,10 @@ void steganography::encode_bitstring(const unsigned int& start, const unsigned i
     unsigned int pixel_index = 0;
     unsigned int bitstring_index = 0;
     for (int row = 0; row < this -> image.rows; row++) {
-        if (bitstring_index == end) {
-            break;
-        }
         for (int col = 0; col < this -> image.cols; col++) {
-            if (bitstring_index == end) {
-                break;
-            }
             for (int cha = 0; cha < this -> image.channels(); cha++) {
                 if (bitstring_index == end) {
-                    break;
+                    return;
                 }
 
                 if (pixel_index >= start) {
@@ -81,16 +75,10 @@ boost::dynamic_bitset<> steganography::decode_bitstring(unsigned int start, unsi
 
     unsigned int index = 0;
     for (int row = 0; row < this -> image.rows; row++) {
-        if (index == end) {
-            break;
-        }
         for (int col = 0; col < this -> image.cols; col++) {
-            if (index == end) {
-                break;
-            }
             for (int cha = 0; cha < this -> image.channels(); cha++) {
                 if (index == end) {
-                    break;
+                    return bitstring;
                 }
 
                 if (index >= start) {
@@ -105,8 +93,6 @@ boost::dynamic_bitset<> steganography::decode_bitstring(unsigned int start, unsi
             }
         }
     }
-
-    return bitstring;
 };
 
 // Load a file into a binary string (dynamic_bitset<>)
