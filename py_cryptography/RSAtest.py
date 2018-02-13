@@ -42,6 +42,8 @@ def RSA_keygen():
     keys.write(str(n) + '\n')
     keys.write(str(e) + '\n')
     keys.write(str(d).strip('.0') + '\n')
+    keys.write(str(p) + '\n')
+    keys.write(str(q))
 
     return None
 
@@ -50,7 +52,9 @@ def RSA_encode(message,keys):
     keylines = keyfile.readlines()
 
     n = int(keylines[0])
+    print (n)
     e = int(keylines[1])
+    print(e)
     keyfile.close()
     
     asc2_m = [ord(c) for c in message]                
@@ -73,7 +77,9 @@ def RSA_decode(message,keys):
     
     code_doc = open(message,"r")
     stringcode = code_doc.readlines()
-    asc2_code = [int(i) for i in stringcode]
+    print (stringcode)
+    asc2_code = [((int(i))**d % n) for i in stringcode]
+    print (asc2_code)
     plaintext_list = [chr(c) for c in asc2_code]
     plaintext = ''.join(plaintext_list)
     code_doc.close()

@@ -8,3 +8,9 @@ gui/less.js
 
 # Vscode
 .vscode
+
+#RSA pycache/message/keys
+py_cryptography/keys.txt
+py_cryptography/message.txt
+py_cryptography/__pycache__/
+
