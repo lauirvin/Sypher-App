@@ -40,6 +40,7 @@ body {
     display: flex;
     text-align: center;
     margin-top: 5%;
+    padding-bottom: 2%;
 
     &-container {
       width: 50%;
@@ -52,44 +53,45 @@ body {
   .content {
     text-align: left;
     margin: 0%;
-    margin-top: 2%;
     overflow: hidden;
     height: 0%;
     position: absolute;
     bottom: 0;
 
     &.mod-encode-text {
-      background: url("../media/encodetext_content_box.png") center center
-        no-repeat;
-      background-size: 100%;
+      background: url("../media/encodetext_content_box.png")  no-repeat bottom;
+      background-size:100%;
+      width: 100%;
     }
 
     &.mod-encode-image {
-      background: url("../media/encodeimage_content_box.png") center center
-        no-repeat;
+      background: url("../media/encodeimage_content_box.png")  no-repeat bottom;
       background-size: 100%;
+      width: 100%;
     }
 
     &.mod-decode-text {
-      background: url("../media/decodetext_content_box.png") center center
-        no-repeat;
+      background: url("../media/decodetext_content_box.png")  no-repeat bottom;
       background-size: 100%;
+      width: 100%;
     }
 
     &.mod-decode-image {
-      background: url("../media/decodeimage_content_box.png") center center
-        no-repeat;
+      background: url("../media/decodeimage_content_box.png") no-repeat bottom;
       background-size: 100%;
+      width: 100%;
     }
     p {
       height: 0%;
       margin: 5%;
-      margin-top: 20%;
+      position: absolute;
+      bottom: 0;
+      margin-bottom: 65%;
     }
   }
 
   .content:target {
-    height: 50%;
+    height: 51%;
     -webkit-transition: height 1000ms ease;
     transition: height 1000ms ease;
   }
