@@ -5,6 +5,7 @@ function encodeEmptyUpload() {
   } else {
     document.getElementById("next").style.backgroundColor = "#35B0AB";
     document.getElementById("link").href = "./encode_download.html";
+    document.getElementById("link").onclick="return true";
   }
   window.setTimeout("encodeEmptyUpload();", 1000 * 0.1);
 }
@@ -16,6 +17,7 @@ function decodeEmptyUpload() {
   } else {
     document.getElementById("next").style.backgroundColor = "#DD8968";
     document.getElementById("link").href = "./decode_download.html";
+    document.getElementById("link").onclick="return true;";
   }
   window.setTimeout("decodeEmptyUpload();", 1000 * 0.1);
 }
