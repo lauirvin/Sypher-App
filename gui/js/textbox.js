@@ -9,12 +9,3 @@ function emptyTextbox() {
   }
   window.setTimeout("emptyTextbox();", 1000 * 0.1);
 }
-
-function focusTextbox() {
-  var textbox = document.getElementById("textbox");
-  document.getElementById("next").style.display = "none";
-}
-
-function blurTextbox() {
-  document.getElementById("next").style.display = "block";
-}
