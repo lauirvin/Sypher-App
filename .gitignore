@@ -101,9 +101,9 @@ ENV/
 .mypy_cache/
 
 # C++ build/binaries/fetched header files
-bin/*
-build/*
-src/optparse.hpp
+steganography/bin/*
+steganography/build/*
+steganography/src/optparse.hpp
 
 # Less - This file can now be fetched using install.bat/install.sh
 gui/less.js

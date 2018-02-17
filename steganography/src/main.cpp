@@ -1,9 +1,10 @@
 #include "optparse.hpp"
-#include "steganography.hpp"
+#include "lsb.hpp"
+#include "dct.hpp"
 
 int main(int argc, const char** argv) {
     optparse::OptionParser parser = optparse::OptionParser()
-        .prog("steganography")
+        .prog("lsb")
         .description("Simple C++ program to allow the manipulation of 'Last Bit Steganographic' image");
 
     parser.add_option("-i", "--input-image")
@@ -21,7 +22,6 @@ int main(int argc, const char** argv) {
         .help("Decodes '--input-file'");
 
     const optparse::Values options = parser.parse_args(argc, argv);
-    const std::vector<std::string> args = parser.args();
 
     if (!std::string(options.get("input-image")).size()) {
         std::cout << "Error: You must specify an input image" << std::endl;
@@ -29,7 +29,7 @@ int main(int argc, const char** argv) {
         exit(0);
     }
 
-    steganography steg = steganography(options["input-image"]);
+    lsb steg = lsb(options["input-image"]);
 
     if (options["encode-file"].size() && options.get("decode")) {
         std::cerr << "You can't both decode and encode at the same time" << std::endl;
