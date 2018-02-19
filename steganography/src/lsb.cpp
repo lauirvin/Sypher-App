@@ -46,10 +46,16 @@ void lsb::encode_bitstring(const unsigned int& start, const unsigned int& end, c
                 }
 
                 if (pixel_index >= start) {
-                    if (this -> image.channels() == 3) {
-                        this -> set_lsb(&this -> image.at<cv::Vec3b>(row, col)[cha], bitstring.test(bitstring_index));
-                    } else {
-                        this -> set_lsb(&this -> image.at<cv::Vec4b>(row, col)[cha], bitstring.test(bitstring_index));
+                    switch (this -> image.channels()) {
+                        case 3 : {
+                            this -> set_lsb(&this -> image.at<cv::Vec3b>(row, col)[cha], bitstring.test(bitstring_index));
+                            break;
+                        };
+
+                        case 4 : {
+                            this -> set_lsb(&this -> image.at<cv::Vec4b>(row, col)[cha], bitstring.test(bitstring_index));
+                            break;
+                        };
                     }
 
                     bitstring_index++;
@@ -73,10 +79,16 @@ boost::dynamic_bitset<> lsb::decode_bitstring(unsigned int start, unsigned int e
                 }
 
                 if (index >= start) {
-                    if (this -> image.channels() == 3) {
-                        bitstring.push_back(this -> get_lsb(this -> image.at<cv::Vec3b>(row, col)[cha]));
-                    } else {
-                        bitstring.push_back(this -> get_lsb(this -> image.at<cv::Vec4b>(row, col)[cha]));
+                    switch (this -> image.channels()) {
+                        case 3 : {
+                            bitstring.push_back(this -> get_lsb(this -> image.at<cv::Vec3b>(row, col)[cha]));
+                            break;
+                        };
+
+                        case 4 : {
+                            bitstring.push_back(this -> get_lsb(this -> image.at<cv::Vec4b>(row, col)[cha]));
+                            break;
+                        };
                     }
                 }
 
