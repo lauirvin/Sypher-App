@@ -9,3 +9,13 @@ function emptyTextbox() {
   }
   window.setTimeout("emptyTextbox();", 1000 * 0.1);
 }
+
+function emptyInputbox() {
+  if (document.getElementById("key1" && "key2").value == "") {
+    document.getElementById("next").style.backgroundColor = "#c0c0c0";
+  } else {
+    document.getElementById("next").style.backgroundColor = "#35B0AB";
+    document.getElementById("next").onclick="return true";
+  }
+  window.setTimeout("emptyInputbox();", 1000 * 0.1);
+}

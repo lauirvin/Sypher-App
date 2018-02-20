@@ -9,7 +9,7 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 </head>
 
-<body onload="emptyInput()">
+<body onload="emptyInputbox()">
     <section>
         <header class="rubric mod-title">
             <a onclick='javascript:window.history.back()'>
@@ -19,15 +19,13 @@
             <p></p>
         </header>
         <div class="user-keys">
-            <input id="key" type="text" placeholder="Enter key 1...">
-            <input id="key" type="text" placeholder="Enter key 2...">
-            <p>Help message</p>
+            <input id="key1" type="text" placeholder="Enter key 1...">
+            <input id="key2" type="text" placeholder="Enter key 2...">
+            <p><img src="../media/warning.png"/>These keys will be provided by the person you are sending a message to. Your keys can be found in the information section on the main menu.</p>
         </div>
-        <footer id="next" class="next-button mod-keppel">
-            <a href="" id="link" onclick="return false;">
-                <h3>NEXT</h3>
-            </a>
-        </footer>
+        <a class="next-button mod-keppel" href="encode_main.html" id="next" onclick="return false;">
+            <h3>NEXT</h3>
+        </a>
     </section>
 </body>
 
