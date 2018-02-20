@@ -9,7 +9,7 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 </head>
 
-<body onload="encodeEmptyUpload()">
+<body onload="encodeCheckUpload()">
     <section>
         <header class="rubric mod-title">
             <a onclick='javascript:window.history.back()'>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="browse-text mod-upload">
                     <label for="upload">Upload</label>
-                    <input onchange="readFileName(this)" id="upload" type="file">
+                    <input onchange="readFileName(this); encodeCheckUpload()" id="upload" type="file">
                 </div>
             </div>
         </div>
