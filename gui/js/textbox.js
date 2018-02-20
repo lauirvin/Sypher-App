@@ -1,5 +1,5 @@
 function emptyTextbox() {
-  if (document.getElementById("textbox").value == "") {
+  if (document.getElementById("title" && "textbox").value == "") {
     document.getElementById("link").style.backgroundColor = "#c0c0c0";
   } else {
     document.getElementById("link").style.backgroundColor = "#35B0AB";
