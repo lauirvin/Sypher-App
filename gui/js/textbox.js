@@ -5,7 +5,7 @@ function emptyTextbox() {
   } else {
     document.getElementById("next").style.backgroundColor = "#35B0AB";
     document.getElementById("link").href = "encode_upload_image.html";
-    document.getElementById("link").onclick="return true";
+    document.getElementById("link").onclick = "return true";
   }
   window.setTimeout("emptyTextbox();", 1000 * 0.1);
 }
@@ -15,7 +15,13 @@ function emptyInputbox() {
     document.getElementById("next").style.backgroundColor = "#c0c0c0";
   } else {
     document.getElementById("next").style.backgroundColor = "#35B0AB";
-    document.getElementById("next").onclick="return true";
+    document.getElementById("next").onclick = "return true";
   }
   window.setTimeout("emptyInputbox();", 1000 * 0.1);
+}
+
+function copyToClipboard() {
+  var text = document.getElementById("encodedText");
+  text.select();
+  document.execCommand("Copy");
 }
