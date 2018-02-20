@@ -9,13 +9,14 @@ function emptyTextbox() {
 }
 
 function emptyInputbox() {
-  if (document.getElementById("key1" && "key2").value == "") {
-    document.getElementById("link").style.backgroundColor = "#c0c0c0";
-  } else {
+  if ((document.getElementById("key1").value != "") && (document.getElementById("key2").value!="")) {
     document.getElementById("link").style.backgroundColor = "#35B0AB";
     document.getElementById("link").onclick = "return true";
+    document.getElementById("link").href="encode_text.html";
+  } else {
+    document.getElementById("link").style.backgroundColor = "#c0c0c0";
+    document.getElementById("link").href="javascript: void(0)";
   }
-  window.setTimeout("emptyInputbox();", 1000 * 0.1);
 }
 
 function copyToClipboard() {
