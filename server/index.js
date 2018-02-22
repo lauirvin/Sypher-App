@@ -2,6 +2,8 @@
 
 'use strict';
 
+const exec = require('child_process').exec;
+
 const express = require('express');
 const app = express();
 
@@ -12,7 +14,7 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
-app.post('/upload', (req, res) => {
+app.post('/encode', (req, res) => {
     let image = req.files.image;
     let file = req.files.file;
 
@@ -32,7 +34,21 @@ app.post('/upload', (req, res) => {
         }
     });
 
-    return res.status(201).send('Created');
+    exec(`../steganography/bin/steganography -i ${image.name} -e ${file.name}`, (error, stdout, stderr) => {
+        if (error) {
+            console.log(stderr.trim());
+        }
+
+        if (stdout) {
+            console.log(stdout).trim();
+        }
+
+        res.download('steg-' + image.name.substr(0, image.name.lastIndexOf('.')) + '.png', (error) => {
+            if (error) {
+                console.log(error);
+            }
+        });
+    });
 });
 
 const port = 8080;
