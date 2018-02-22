@@ -15,6 +15,8 @@ void lsb::encode_file(const boost::filesystem::path& file_path) {
     this -> encode_bitstring(0, 32, boost::dynamic_bitset<>(bitstring_length.to_string()));
     this -> encode_bitstring(32, bitstring.size(), bitstring);
 
+    this -> image_path.replace_extension(".png");
+
     if (this -> image_path.parent_path().string().size() <= 0) {
         cv::imwrite(this -> image_path.parent_path().string() + "steg-" + this -> image_path.filename().string(), this -> image);
     } else {

@@ -1,6 +1,5 @@
 #include "optparse.hpp"
 #include "lsb.hpp"
-#include "dct.hpp"
 
 int main(int argc, const char** argv) {
     optparse::OptionParser parser = optparse::OptionParser()
