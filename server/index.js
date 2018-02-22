@@ -3,6 +3,7 @@
 'use strict';
 
 const exec = require('child_process').exec;
+const fs = require('fs');
 
 const express = require('express');
 const app = express();
@@ -22,15 +23,15 @@ app.post('/encode', (req, res) => {
         return res.status(400).send('Files not uploaded correctly');
     }
 
-    image.mv(image.name, (err) => {
-        if (err) {
-            return res.status(500).send(err);
+    image.mv(image.name, (error) => {
+        if (error) {
+            return res.status(500).send(error);
         }
     });
 
-    file.mv(file.name, (err) => {
-        if (err) {
-            return res.status(500).send(err);
+    file.mv(file.name, (error) => {
+        if (error) {
+            return res.status(500).send(error);
         }
     });
 
@@ -47,6 +48,24 @@ app.post('/encode', (req, res) => {
             if (error) {
                 console.log(error);
             }
+
+            fs.unlink(image.name, (error) => {
+                if (error) {
+                    throw error;
+                }
+            });
+
+            fs.unlink(file.name, (error) => {
+                if (error) {
+                    throw error;
+                }
+            });
+
+            fs.unlink(`${'steg-' + image.name.substr(0, image.name.lastIndexOf('.')) + '.png'}`, (error) => {
+                if (error) {
+                    throw error;
+                }
+            });
         });
     });
 });
