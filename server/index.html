@@ -1,13 +1,30 @@
+<!DOCTYPE html>
 <html>
-  <body>
-    <form ref='uploadForm'
-      id='uploadForm'
-      action='http://localhost:8080/encode'
-      method='post'
-      encType="multipart/form-data">
-        <input type='file' name='image' multiple/>
-        <input type='file' name='file' multiple/>
-        <input type='submit' value='upload'/>
-    </form>
-  </body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Steganography</title>
+    </head>
+    <body>
+        <div>
+            <form ref='encodeForm'
+                id='encodeForm'
+                action='http://localhost:8080/encode'
+                method='post'
+                encType="multipart/form-data">
+                <input type='file' name='image' multiple/>
+                <input type='file' name='file' multiple/>
+                <input type='submit' value='encode'/>
+            </form>
+        </div>
+        <div>
+            <form ref='decodeForm'
+                id='decodeForm'
+                action='http://localhost:8080/decode'
+                method='post'
+                encType="multipart/form-data">
+                <input type='file' name='image' multiple/>
+                <input type='submit' value='decode'/>
+            </form>
+        </div>
+    </body>
 </html>
