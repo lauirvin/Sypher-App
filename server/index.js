@@ -20,8 +20,12 @@ function genRandom (low, high, length) {
     return string;
 }
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+app.get('/encode', (req, res) => {
+    res.sendFile(__dirname + '/encode.html');
+});
+
+app.get('/decode', (req, res) => {
+    res.sendFile(__dirname + '/decode.html');
 });
 
 app.post('/encode', (req, res) => {
