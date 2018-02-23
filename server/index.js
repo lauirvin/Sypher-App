@@ -12,14 +12,21 @@ const app = express();
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 
-const enocdeDir = '/tmp/steg-encode/';
-const decodeDir = '/tmp/steg-decode/';
+function genRandom (low, high, length) {
+    let string = '';
+    for (let i = 0; i < length; i++) {
+        string += Math.floor(Math.random() * (high - low) + low);
+    }
+    return string;
+}
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
 app.post('/encode', (req, res) => {
+    const enocdeDir = `/tmp/steg-encode-${genRandom(0, 9, 8)}/`;
+
     fs.mkdir(enocdeDir, (error) => {
         if (error) {
             throw error;
@@ -69,6 +76,8 @@ app.post('/encode', (req, res) => {
 });
 
 app.post('/decode', (req, res) => {
+    const decodeDir = `/tmp/steg-decode-${genRandom(0, 9, 8)}/`;
+
     fs.mkdir(decodeDir, (error) => {
         if (error) {
             throw error;
