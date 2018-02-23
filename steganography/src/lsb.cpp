@@ -8,7 +8,7 @@ void lsb::encode_file(const boost::filesystem::path& file_path) {
     std::bitset<32> bitstring_length = bitstring.size();
 
     if (bitstring_length.to_ulong() + 32 > this -> image_size) {
-        std::cerr << "There isn't enough room in this image to store this file" << std::endl;
+        std::cerr << "Error: Failed to store file in image the image is too small" << std::endl;
         exit(1);
     }
 
@@ -26,6 +26,12 @@ void lsb::encode_file(const boost::filesystem::path& file_path) {
 
 void lsb::decode_file() {
     boost::dynamic_bitset<> bitstring_length = this -> decode_bitstring(0, 32);
+
+    if (bitstring_length.to_ulong() > this -> image_size) {
+        std::cerr << "Error: This image does not appear to contain a hidden file" << std::endl;
+        exit(1);
+    }
+
     boost::dynamic_bitset<> bitstring_filename_length = this -> decode_bitstring(32, 64);
     boost::dynamic_bitset<> bitstring_filename = this -> decode_bitstring(64, 64 + bitstring_filename_length.to_ulong());
     boost::dynamic_bitset<> bitstring_filedata = this -> decode_bitstring(64 + bitstring_filename_length.to_ulong(), bitstring_length.to_ulong() + 32);

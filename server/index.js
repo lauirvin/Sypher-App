@@ -37,7 +37,7 @@ app.post('/encode', (req, res) => {
     const file = req.files.file;
 
     if (image == null || file == null) {
-        return res.status(400).send('Files not uploaded correctly');
+        return res.status(500).send('Failed to retrieve files');
     }
 
     image.mv(enocdeDir + image.name, (error) => {
@@ -54,23 +54,25 @@ app.post('/encode', (req, res) => {
 
     exec(`../steganography/bin/steganography -i ${enocdeDir}${image.name} -e ${enocdeDir}${file.name}`, (error, stdout, stderr) => {
         if (error) {
-            console.log(stderr.trim());
-        }
-
-        if (stdout) {
-            console.log(stdout).trim();
-        }
-
-        res.download(enocdeDir + 'steg-' + image.name.substr(0, image.name.lastIndexOf('.')) + '.png', (error) => {
-            if (error) {
-                console.log(error);
+            if (stderr.trim() === 'Error: Failed to store file in image the image is too small') {
+                res.status(500).send(stderr.trim());
+            }
+        } else {
+            if (stdout) {
+                console.log(stdout).trim();
             }
 
-            rimraf(enocdeDir, (error) => {
+            res.download(enocdeDir + 'steg-' + image.name.substr(0, image.name.lastIndexOf('.')) + '.png', (error) => {
                 if (error) {
-                    throw error;
+                    console.log(error);
                 }
             });
+        }
+
+        rimraf(enocdeDir, (error) => {
+            if (error) {
+                throw error;
+            }
         });
     });
 });
@@ -87,7 +89,7 @@ app.post('/decode', (req, res) => {
     const image = req.files.image;
 
     if (image == null) {
-        return res.status(400).send('Files not uploaded correctly');
+        return res.status(500).send('Failed to retrieve files');
     }
 
     image.mv(decodeDir + image.name, (error) => {
@@ -98,25 +100,27 @@ app.post('/decode', (req, res) => {
 
     exec(`../steganography/bin/steganography -i ${decodeDir}${image.name} -d`, (error, stdout, stderr) => {
         if (error) {
-            console.log(stderr.trim());
-        }
-
-        if (stdout) {
-            console.log(stdout).trim();
-        }
-
-        fs.unlinkSync(decodeDir + image.name);
-
-        res.download(decodeDir + fs.readdirSync(decodeDir)[0], (error) => {
-            if (error) {
-                console.log(error);
+            if (stderr.trim() === 'Error: This image does not appear to contain a hidden file') {
+                res.status(500).send(stderr.trim());
+            }
+        } else {
+            if (stdout) {
+                console.log(stdout).trim();
             }
 
-            rimraf(decodeDir, (error) => {
+            fs.unlinkSync(decodeDir + image.name);
+
+            res.download(decodeDir + fs.readdirSync(decodeDir)[0], (error) => {
                 if (error) {
-                    throw error;
+                    console.log(error);
                 }
             });
+        }
+
+        rimraf(decodeDir, (error) => {
+            if (error) {
+                throw error;
+            }
         });
     });
 });
