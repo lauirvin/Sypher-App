@@ -12,12 +12,15 @@ const app = express();
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 
+const enocdeDir = '/tmp/steg-encode/';
+const decodeDir = '/tmp/steg-decode/';
+
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
 app.post('/encode', (req, res) => {
-    fs.mkdir('/tmp/steg-encode/', (error) => {
+    fs.mkdir(enocdeDir, (error) => {
         if (error) {
             throw error;
         }
@@ -30,19 +33,19 @@ app.post('/encode', (req, res) => {
         return res.status(400).send('Files not uploaded correctly');
     }
 
-    image.mv('/tmp/steg-encode/' + image.name, (error) => {
+    image.mv(enocdeDir + image.name, (error) => {
         if (error) {
             return res.status(500).send(error);
         }
     });
 
-    file.mv('/tmp/steg-encode/' + file.name, (error) => {
+    file.mv(enocdeDir + file.name, (error) => {
         if (error) {
             return res.status(500).send(error);
         }
     });
 
-    exec(`../steganography/bin/steganography -i /tmp/steg-encode/${image.name} -e /tmp/steg-encode/${file.name}`, (error, stdout, stderr) => {
+    exec(`../steganography/bin/steganography -i ${enocdeDir}${image.name} -e ${enocdeDir}${file.name}`, (error, stdout, stderr) => {
         if (error) {
             console.log(stderr.trim());
         }
@@ -51,12 +54,12 @@ app.post('/encode', (req, res) => {
             console.log(stdout).trim();
         }
 
-        res.download('/tmp/steg-encode/steg-' + image.name.substr(0, image.name.lastIndexOf('.')) + '.png', (error) => {
+        res.download(enocdeDir + 'steg-' + image.name.substr(0, image.name.lastIndexOf('.')) + '.png', (error) => {
             if (error) {
                 console.log(error);
             }
 
-            rimraf('/tmp/steg-encode/', (error) => {
+            rimraf(enocdeDir, (error) => {
                 if (error) {
                     throw error;
                 }
@@ -66,7 +69,7 @@ app.post('/encode', (req, res) => {
 });
 
 app.post('/decode', (req, res) => {
-    fs.mkdir('/tmp/steg-decode/', (error) => {
+    fs.mkdir(decodeDir, (error) => {
         if (error) {
             throw error;
         }
@@ -78,13 +81,13 @@ app.post('/decode', (req, res) => {
         return res.status(400).send('Files not uploaded correctly');
     }
 
-    image.mv('/tmp/steg-decode/' + image.name, (error) => {
+    image.mv(decodeDir + image.name, (error) => {
         if (error) {
             return res.status(500).send(error);
         }
     });
 
-    exec(`../steganography/bin/steganography -i /tmp/steg-decode/${image.name} -d`, (error, stdout, stderr) => {
+    exec(`../steganography/bin/steganography -i ${decodeDir}${image.name} -d`, (error, stdout, stderr) => {
         if (error) {
             console.log(stderr.trim());
         }
@@ -93,14 +96,14 @@ app.post('/decode', (req, res) => {
             console.log(stdout).trim();
         }
 
-        fs.unlinkSync(`/tmp/steg-decode/${image.name}`);
+        fs.unlinkSync(decodeDir + image.name);
 
-        res.download('/tmp/steg-decode/' + fs.readdirSync('/tmp/steg-decode/')[0], (error) => {
+        res.download(decodeDir + fs.readdirSync(decodeDir)[0], (error) => {
             if (error) {
                 console.log(error);
             }
 
-            rimraf('/tmp/steg-decode/', (error) => {
+            rimraf(decodeDir, (error) => {
                 if (error) {
                     throw error;
                 }
