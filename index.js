@@ -8,9 +8,12 @@ const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
+const lessMiddleware = require('less-middleware')
 
 const app = express();
 
+app.use(lessMiddleware(path.join(__dirname, "public/css")))
+app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
 
 function genRandom (low, high, length) {
@@ -21,12 +24,12 @@ function genRandom (low, high, length) {
     return string;
 }
 
-app.get('/encode', (req, res) => {
-    res.sendFile(path.join(__dirname, '/encode.html'));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/index.html'));
 });
 
-app.get('/decode', (req, res) => {
-    res.sendFile(path.join(__dirname, '/decode.html'));
+app.get('/pages/encode_main.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/encode_main.html'));
 });
 
 app.post('/encode', (req, res) => {
