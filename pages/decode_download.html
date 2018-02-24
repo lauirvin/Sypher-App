@@ -20,20 +20,20 @@
                 <img class="home-btn" src="../media/home_btn.png">
             </a>
         </header>
-        <div class="upload-container">
+        <div class="browse-container">
             <div class="preview-box mod-image-preview">
                 <img id="receive">
             </div>
             <div class="browse-button">
-                <div class="browse-icon">
-                    <img src="../media/download.png">
-                </div>
-                <div class="browse-text mod-download">
-                    <a href="../media/download.png" download>
-                        <label for="upload">Download</label>
-                        <input type="button" download="../media/download.png">
-                    </a>
-                </div>
+                <a href="../media/download.png" download>
+                    <label for="download">
+                        <div class="label-icon">
+                            <img src="../media/download.png" />
+                        </div>
+                        <p>Download</p>
+                    </label>
+                    <input id="download" type="button" download="../media/download.png">
+                </a>
             </div>
         </div>
         <a class="next-button mod-copperfield" onclick="return false;">

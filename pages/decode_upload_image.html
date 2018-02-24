@@ -18,18 +18,18 @@
             <h1>Decode</h1>
             <p></p>
         </header>
-        <div class="upload-container">
+        <div class="browse-container">
             <div class="preview-box mod-image-preview">
                 <img id="preview">
             </div>
             <div class="browse-button">
-                <div class="browse-icon">
-                    <img src="../media/upload.png">
-                </div>
-                <div class="browse-text mod-upload">
-                    <label for="upload">Upload</label>
-                    <input onchange="previewImage(this)" id="upload" type="file" accept="image/*">
-                </div>
+                <label for="upload">
+                    <div class="label-icon">
+                        <img src="../media/upload.png" />
+                    </div>
+                    <p>Upload</p>
+                </label>
+                <input onchange="previewImage(this)" id="upload" type="file" accept="image/*">
             </div>
         </div>
         <a href="./decode_download.html" class="next-button mod-copperfield" id="link" onclick="return false;">

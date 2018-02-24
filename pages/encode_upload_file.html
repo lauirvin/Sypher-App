@@ -18,19 +18,19 @@
             <h1>Encode</h1>
             <p></p>
         </header>
-        <div class="upload-container">
+        <div class="browse-container">
             <div class="preview-box mod-file-preview">
                 <img src="../media/preview_file.png">
                 <p id="file-name"></p>
             </div>
             <div class="browse-button">
-                <div class="browse-icon">
-                    <img src="../media/upload.png">
-                </div>
-                <div class="browse-text mod-upload">
-                    <label for="upload">Upload</label>
-                    <input onchange="readFileName(this); fileCheckUpload()" id="upload" type="file">
-                </div>
+                <label for="upload">
+                    <div class="label-icon">
+                        <img src="../media/upload.png" />
+                    </div>
+                    <p>Upload</p>
+                </label>
+                <input onchange="readFileName(this); fileCheckUpload()" id="upload" type="file">
             </div>
         </div>
         <a href="./encode_upload_image.html" class="next-button mod-keppel" id="link" onclick="return false;">

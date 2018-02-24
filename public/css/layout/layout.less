@@ -20,6 +20,11 @@ html {
 }
 
 body {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100vw;
+  height: 100vh;
+
   p {
     line-height: 1.6em;
   }
@@ -28,15 +33,15 @@ body {
   height: 100%;
   text-align: center;
   overflow: hidden;
- 
+
   div:active {
     text-decoration: none;
-    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   }
 
   img:active {
     text-decoration: none;
-    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   }
 
   .loading-logo {
@@ -78,7 +83,7 @@ body {
 
   a {
     text-decoration: none;
-    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     outline: none;
   }
 
@@ -102,7 +107,7 @@ body {
     font-weight: normal;
     text-decoration: none;
   }
-  
+
   .rubric {
     display: flex;
     margin: 0 auto;
@@ -111,12 +116,11 @@ body {
     position: sticky;
     background: @white;
     z-index: 100;
-    
 
     &.mod-banner {
       color: @white;
       padding-top: 3%;
-      
+
       h1 {
         padding: 4%;
       }
@@ -170,7 +174,7 @@ body {
   .next-button {
     bottom: 0;
     position: fixed;
-    width: 100vw;
+    width: 100%;
     margin: 0;
     -moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
@@ -199,8 +203,10 @@ body {
     input {
       color: @white;
       font-size: 2em;
-      margin: 2.1%;
       font-weight: bold;
+      margin-top: 2%;
+      margin-bottom: 2%;
+      width: 100%;
       -webkit-appearance: none;
       -moz-appearance: none;
       border: none;
@@ -214,55 +220,47 @@ body {
     text-align: center;
   }
 
-  .upload-container {
+  .browse-container {
     margin: 0 auto;
     margin: 8%;
     margin-top: 10%;
+
     .browse-button {
-      display: table;
-      text-align: center;
+      width: 60%;
       margin: 0 auto;
-      background-color: @browseblue;
-      border-radius: 5px;
-      padding-top: 5%;
-      padding-bottom: 5%;
-      width: 50%;
+      text-align: center;
+
       input {
         display: none;
       }
-      .browse-text {
-        display: table-cell;
-        width: 50%;
-        vertical-align: middle;
-        text-align: center;
-        &.mod-upload {
-          padding-right: 18%;
-        }
-        &.mod-download {
-          padding-right: 11%;
-        }
-
-        label {
-          margin: 0 auto;
-          color: @white;
+      label {
+        margin: 0 auto;
+        display: table;
+        border-radius: 5px;
+        color: @white;
+        padding-top: 7%;
+        padding-bottom: 7%;
+        padding-right: 2%;
+        padding-left: 2%;
+        background: @browseblue;
+        p {
+          display: table-cell;
           vertical-align: middle;
-          display: inline-block;
           font-size: 1.2em;
+          display: inline;
+          padding: 4%;
         }
-      }
-      .browse-icon {
-        display: table-cell;
-        width: 50%;
-        vertical-align: middle;
-        text-align: center;
-        padding-left: 10%;
-        img {
-          width: 1.5em;
-          display: inline-block;
+        .label-icon {
+          display: inline;
+          padding: 4%;
+          img {
+            text-align: left;
+            width: 15%;
+            vertical-align: middle;
+          }
         }
       }
     }
-
     .preview-box {
       margin-bottom: 18%;
 
