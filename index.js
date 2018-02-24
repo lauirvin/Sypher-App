@@ -32,6 +32,48 @@ app.get('/pages/encode_main.html', (req, res) => {
     res.sendFile(path.join(__dirname, '/pages/encode_main.html'));
 });
 
+
+
+app.get('/pages/encode_download.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/encode_download.html'));
+});
+
+app.get('/pages/encode_enterkeys.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/encode_enterkeys.html'));
+});
+
+app.get('/pages/encode_text_to_image.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/encode_text_to_image.html'));
+});
+
+app.get('/pages/encode_text.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/encode_text.html'));
+});
+
+app.get('/pages/encode_upload_file.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/encode_upload_file.html'));
+});
+
+app.get('/pages/encode_upload_image.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/encode_upload_image.html'));
+});
+
+app.get('/pages/encode_copytext.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/encode_copytext.html'));
+});
+
+app.get('/pages/decode_main.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/decode_main.html'));
+});
+
+app.get('/pages/decode_upload_image.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/decode_upload_image.html'));
+});
+
+app.get('/pages/decode_download.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '/pages/decode_download.html'));
+});
+
 app.post('/encode', (req, res) => {
     const encodeDir = path.join('/tmp/steg-encode-') + genRandom(0, 9, 8);
 
