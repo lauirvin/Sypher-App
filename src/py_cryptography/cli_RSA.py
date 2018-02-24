@@ -13,10 +13,10 @@ def command_line():
         RSA_keygen()
 
     if arguments.message:
-        coded = RSA_encode(arguments.message,"keys.txt")     
+        coded = RSA_encode(arguments.message,"public.b")     
 
     if arguments.coded_message:
-        message = RSA_decode(arguments.coded_message,"keys.txt")
+        message = RSA_decode(arguments.coded_message,"private.b")
         print (message)
                                                                                    
 if __name__ == '__main__':
