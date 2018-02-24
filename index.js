@@ -25,53 +25,27 @@ function genRandom (low, high, length) {
 }
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/index.html'));
+    res.sendFile(path.join(__dirname, 'pages', 'index.html'));
 });
 
-app.get('/pages/encode_main.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/encode_main.html'));
-});
+const pages = [
+    'decode_download.html',
+    'decode_main.html',
+    'decode_upload_image.html',
+    'encode_copytext.html',
+    'encode_download.html',
+    'encode_enterkeys.html',
+    'encode_main.html',
+    'encode_text_to_image.html',
+    'encode_text.html',
+    'encode_upload_file.html',
+    'encode_upload_image.html',
+];
 
-
-
-app.get('/pages/encode_download.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/encode_download.html'));
-});
-
-app.get('/pages/encode_enterkeys.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/encode_enterkeys.html'));
-});
-
-app.get('/pages/encode_text_to_image.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/encode_text_to_image.html'));
-});
-
-app.get('/pages/encode_text.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/encode_text.html'));
-});
-
-app.get('/pages/encode_upload_file.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/encode_upload_file.html'));
-});
-
-app.get('/pages/encode_upload_image.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/encode_upload_image.html'));
-});
-
-app.get('/pages/encode_copytext.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/encode_copytext.html'));
-});
-
-app.get('/pages/decode_main.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/decode_main.html'));
-});
-
-app.get('/pages/decode_upload_image.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/decode_upload_image.html'));
-});
-
-app.get('/pages/decode_download.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '/pages/decode_download.html'));
+pages.map(page => {
+    app.get('/' + path.join('pages', page), (req, res) => {
+        res.sendFile(path.join(__dirname, 'pages', page));
+    });
 });
 
 app.post('/encode', (req, res) => {
