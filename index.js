@@ -8,12 +8,12 @@ const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
-const lessMiddleware = require('less-middleware')
+const lessMiddleware = require('less-middleware');
 
 const app = express();
 
-app.use(lessMiddleware(path.join(__dirname, "public/css")))
-app.use(express.static(path.join(__dirname, "public")));
+app.use(lessMiddleware(path.join(__dirname, 'public/css')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
 
 function genRandom (low, high, length) {

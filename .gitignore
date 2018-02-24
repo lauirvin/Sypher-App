@@ -160,16 +160,16 @@ typings/
 .env
 
 # C++ build/binaries/fetched header files
-steganography/bin/*
-steganography/build/*
-steganography/src/optparse.hpp
+src/steganography/bin/*
+src/steganography/build/*
+src/steganography/src/optparse.hpp
 
 # Less - This file can now be fetched using install.bat/install.sh
-gui/less.js
+public/js/less.js
 
 # Vscode
 .vscode
 
 #RSA pycache/message/keys
-py_cryptography/keys.txt
-py_cryptography/message.txt
+src/py_cryptography/keys.txt
+src/py_cryptography/message.txt
