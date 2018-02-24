@@ -6,15 +6,15 @@ const exec = require('child_process').exec;
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
+const lessMiddleware = require('less-middleware');
 const path = require('path');
 const rimraf = require('rimraf');
-const lessMiddleware = require('less-middleware');
 
 const app = express();
 
-app.use(lessMiddleware(path.join(__dirname, 'public/css')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
+app.use(lessMiddleware(path.join(__dirname, 'public')));
 
 function genRandom (low, high, length) {
     let string = '';
@@ -24,28 +24,18 @@ function genRandom (low, high, length) {
     return string;
 }
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pages', 'index.html'));
-});
-
-const pages = [
-    'decode_download.html',
-    'decode_main.html',
-    'decode_upload_image.html',
-    'encode_copytext.html',
-    'encode_download.html',
-    'encode_enterkeys.html',
-    'encode_main.html',
-    'encode_text_to_image.html',
-    'encode_text.html',
-    'encode_upload_file.html',
-    'encode_upload_image.html',
-];
-
-pages.map(page => {
-    app.get('/' + path.join('pages', page), (req, res) => {
-        res.sendFile(path.join(__dirname, 'pages', page));
-    });
+fs.readdirSync(path.join(__dirname, 'pages')).map(page => {
+    if (page.split('.').pop() === 'html') {
+        if (page === 'index.html') {
+            app.get('/', (req, res) => {
+                res.sendFile(path.join(__dirname, 'pages', page));
+            });
+        } else {
+            app.get('/' + path.join('pages', page), (req, res) => {
+                res.sendFile(path.join(__dirname, 'pages', page));
+            });
+        }
+    }
 });
 
 app.post('/encode', (req, res) => {
