@@ -1,0 +1,26 @@
+{
+  "name": "sypher",
+  "version": "1.0.0",
+  "description": "Simple toolkit for encryption and steganography.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-fileupload": "^0.4.0",
+    "less-middleware": "^2.2.1",
+    "rimraf": "^2.6.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesl33/sypher.git"
+  },
+  "author": "jamesl33, lauirvin, strodew, RasAlgheti",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/jamesl33/sypher/issues"
+  },
+  "homepage": "https://github.com/jamesl33/sypher#readme"
+}
