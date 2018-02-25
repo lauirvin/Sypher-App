@@ -18,7 +18,6 @@ html {
     background-repeat: repeat-x;
   }
 }
-
 body {
   max-width: 100%;
   max-height: 100%;
@@ -181,6 +180,9 @@ body {
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
     text-align: center;
 
+    &.mod-behind {
+      z-index: -1;
+    }
     &.mod-absolute {
       position: absolute;
     }
@@ -264,6 +266,9 @@ body {
     .preview-box {
       margin-bottom: 18%;
 
+      &.mod-tab-preview {
+        margin-bottom: 8%;
+      }
       &.mod-file-preview {
         -moz-box-shadow: inset 0 0 10px @black;
         -webkit-box-shadow: inset 0 0 10px @black;
@@ -293,6 +298,58 @@ body {
           background-size: 30%;
         }
       }
+    }
+  }
+
+  .accordion-tabs {
+    width: 100vw;
+    overflow: hidden;
+    .tab-label {
+      display: inline-block;
+      width: 100vw;
+      background: #4390bc;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      font-size: 1.5em;
+      margin: 0 auto;
+      text-align: left;
+      vertical-align: middle;
+    }
+    label {
+      color: @white;
+      .label-img {
+        width: 40%;
+        text-align: right;
+        display: inline-block;
+        float: right;
+        margin-right: 5%;
+        img {
+          vertical-align: middle;
+          display: inline-block;
+          height: 100%;
+          width: 10%;
+        }
+      }
+      .label-text {
+        text-align: left;
+        display: inline;
+        p {
+          display: inline;
+          padding-left: 5%;
+        }
+      }
+    }
+    input {
+      -webkit-appearance: none;
+      display: none;
+    }
+    .tab-content {
+      height: 0;
+      overflow: hidden;
+      background: @white;
+      -webkit-transition: height 0.7s ease-out;
+      -o-transition: height 0.7s ease-out;
+      transition: height 0.7s ease-out;
     }
   }
 }

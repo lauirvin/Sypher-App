@@ -57,11 +57,23 @@
   .content:target {
     height: 51%;
   }
+  .accordion-tabs {
+    input:checked ~ .tab-content {
+      height: 80vh;
+    }
+  }
 }
 
 @media (min-width: 200px) and (max-width: 319px) {
   .content:target {
     height: 45%;
+  }
+  body {
+    .accordion-tabs {
+      input:checked ~ .tab-content {
+        height: 73vh;
+      }
+    }
   }
 }
 
