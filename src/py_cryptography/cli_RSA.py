@@ -1,8 +1,9 @@
 import argparse
 
-from RSAtest import *
+from RSA import *
 
 def command_line():
+    '''Command line wrapper for RSA.py.'''
     parser = argparse.ArgumentParser(description='Command line interface for RSA encryption')
     parser.add_argument('-n','--new-keys', action='store_true', help='Whether or not new keys should be generated.')
     parser.add_argument('-m','--message', action='store', type=str, help='Message to be encoded.')
