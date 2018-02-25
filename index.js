@@ -12,9 +12,9 @@ const rimraf = require('rimraf');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.posix.join(__dirname, 'public')));
 app.use(fileUpload());
-app.use(lessMiddleware(path.join(__dirname, 'public')));
+app.use(lessMiddleware(path.posix.join(__dirname, 'public')));
 
 function genRandom (low, high, length) {
     let string = '';
@@ -24,22 +24,22 @@ function genRandom (low, high, length) {
     return string;
 }
 
-fs.readdirSync(path.join(__dirname, 'pages')).map(page => {
+fs.readdirSync(path.posix.join(__dirname, 'pages')).map(page => {
     if (page.split('.').pop() === 'html') {
         if (page === 'index.html') {
             app.get('/', (req, res) => {
-                res.sendFile(path.join(__dirname, 'pages', page));
+                res.sendFile(path.posix.join(__dirname, 'pages', page));
             });
         } else {
-            app.get('/' + path.join('pages', page), (req, res) => {
-                res.sendFile(path.join(__dirname, 'pages', page));
+            app.get('/' + path.posix.join('pages', page), (req, res) => {
+                res.sendFile(path.posix.join(__dirname, 'pages', page));
             });
         }
     }
 });
 
 app.post('/encode', (req, res) => {
-    const encodeDir = path.join('/tmp/steg-encode-') + genRandom(0, 9, 8);
+    const encodeDir = path.posix.join('/tmp/steg-encode-') + genRandom(0, 9, 8);
 
     fs.mkdir(encodeDir, (error) => {
         if (error) {
@@ -54,19 +54,19 @@ app.post('/encode', (req, res) => {
         return res.status(500).send('Failed to retrieve files');
     }
 
-    image.mv(path.join(encodeDir, image.name), (error) => {
+    image.mv(path.posix.join(encodeDir, image.name), (error) => {
         if (error) {
             return res.status(500).send(error);
         }
     });
 
-    file.mv(path.join(encodeDir, file.name), (error) => {
+    file.mv(path.posix.join(encodeDir, file.name), (error) => {
         if (error) {
             return res.status(500).send(error);
         }
     });
 
-    exec(`../steganography/bin/steganography -i ${path.join(encodeDir, image.name)} -e ${path.join(encodeDir, file.name)}`, (error, stdout, stderr) => {
+    exec(`../steganography/bin/steganography -i ${path.posix.join(encodeDir, image.name)} -e ${path.posix.join(encodeDir, file.name)}`, (error, stdout, stderr) => {
         if (error) {
             if (stderr.trim() === 'Error: Failed to store file in image the image is too small') {
                 res.status(500).send(stderr.trim());
@@ -76,7 +76,7 @@ app.post('/encode', (req, res) => {
                 console.log(stdout).trim();
             }
 
-            res.download(path.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png', (error) => {
+            res.download(path.posix.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png', (error) => {
                 if (error) {
                     console.log(error);
                 }
@@ -92,7 +92,7 @@ app.post('/encode', (req, res) => {
 });
 
 app.post('/decode', (req, res) => {
-    const decodeDir = path.join('/tmp/steg-decode-') + genRandom(0, 9, 8);
+    const decodeDir = path.posix.join('/tmp/steg-decode-') + genRandom(0, 9, 8);
 
     fs.mkdir(decodeDir, (error) => {
         if (error) {
@@ -106,13 +106,13 @@ app.post('/decode', (req, res) => {
         return res.status(500).send('Failed to retrieve files');
     }
 
-    image.mv(path.join(decodeDir, image.name), (error) => {
+    image.mv(path.posix.join(decodeDir, image.name), (error) => {
         if (error) {
             return res.status(500).send(error);
         }
     });
 
-    exec(`../steganography/bin/steganography -i ${path.join(decodeDir, image.name)} -d`, (error, stdout, stderr) => {
+    exec(`../steganography/bin/steganography -i ${path.posix.join(decodeDir, image.name)} -d`, (error, stdout, stderr) => {
         if (error) {
             if (stderr.trim() === 'Error: This image does not appear to contain a hidden file') {
                 res.status(500).send(stderr.trim());
@@ -123,10 +123,10 @@ app.post('/decode', (req, res) => {
             }
 
             if (fs.readdirSync(decodeDir).length !== 1) {
-                fs.unlinkSync(path.join(decodeDir, image.name));
+                fs.unlinkSync(path.posix.join(decodeDir, image.name));
             }
 
-            res.download(path.join(decodeDir, fs.readdirSync(decodeDir)[0]), (error) => {
+            res.download(path.posix.join(decodeDir, fs.readdirSync(decodeDir)[0]), (error) => {
                 if (error) {
                     console.log(error);
                 }
