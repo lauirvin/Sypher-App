@@ -18,7 +18,7 @@ function userUploadCheck() {
 }
 
 function imageCheckUpload() {
-  if (!document.getElementById("preview").hasAttribute("src")) {
+  if (!document.getElementById("preview-img").hasAttribute("src")) {
     document.getElementById("link").style.backgroundColor = "#c0c0c0";
   } else {
     if (document.getElementById("link").className == "next-button mod-keppel") {
