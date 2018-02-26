@@ -56,17 +56,17 @@ app.post('/encode', (req, res) => {
 
     image.mv(path.posix.join(encodeDir, image.name), (error) => {
         if (error) {
-            return res.status(500).send(error);
+            throw error;
         }
     });
 
     file.mv(path.posix.join(encodeDir, file.name), (error) => {
         if (error) {
-            return res.status(500).send(error);
+            throw error;
         }
     });
 
-    exec(`../steganography/bin/steganography -i ${path.posix.join(encodeDir, image.name)} -e ${path.posix.join(encodeDir, file.name)}`, (error, stdout, stderr) => {
+    exec(`src/steganography/bin/steganography -i '${path.posix.join(encodeDir, image.name)}' -e '${path.posix.join(encodeDir, file.name)}'`, (error, stdout, stderr) => {
         if (error) {
             if (stderr.trim() === 'Error: Failed to store file in image the image is too small') {
                 res.status(500).send(stderr.trim());
@@ -78,7 +78,7 @@ app.post('/encode', (req, res) => {
 
             res.download(path.posix.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png', (error) => {
                 if (error) {
-                    console.log(error);
+                    throw error;
                 }
             });
         }
@@ -108,11 +108,11 @@ app.post('/decode', (req, res) => {
 
     image.mv(path.posix.join(decodeDir, image.name), (error) => {
         if (error) {
-            return res.status(500).send(error);
+            throw error;
         }
     });
 
-    exec(`../steganography/bin/steganography -i ${path.posix.join(decodeDir, image.name)} -d`, (error, stdout, stderr) => {
+    exec(`src/steganography/bin/steganography -i '${path.posix.join(decodeDir, image.name)}' -d`, (error, stdout, stderr) => {
         if (error) {
             if (stderr.trim() === 'Error: This image does not appear to contain a hidden file') {
                 res.status(500).send(stderr.trim());
@@ -128,7 +128,7 @@ app.post('/decode', (req, res) => {
 
             res.download(path.posix.join(decodeDir, fs.readdirSync(decodeDir)[0]), (error) => {
                 if (error) {
-                    console.log(error);
+                    throw error;
                 }
             });
         }
