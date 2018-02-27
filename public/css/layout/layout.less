@@ -56,7 +56,6 @@ body {
 
     #loading {
       -webkit-animation: rotation 1.5s infinite linear;
-      -moz-animation: rotation 1.5s infinite linear;
     }
 
     @-webkit-keyframes rotation {
@@ -65,15 +64,6 @@ body {
       }
       to {
         -webkit-transform: rotate(-359deg);
-      }
-    }
-
-    @keyframes rotation {
-      from {
-        -moz-transform: rotate(0deg);
-      }
-      to {
-        -moz-transform: rotate(-359deg);
       }
     }
   }
@@ -193,7 +183,7 @@ body {
     &.mod-form {
       left: 0;
     }
-    
+
     &.mod-behind {
       z-index: -1;
     }
