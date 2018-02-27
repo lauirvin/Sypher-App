@@ -53,13 +53,35 @@
     ##Screen = B/w 320px to 479px
   */
 
-@media (min-width: 320px) and (max-width: 480px) {
+@media (min-width: 300px) and (max-width: 320px) {
   .content:target {
     height: 51%;
   }
   .accordion-tabs {
     input:checked ~ .tab-content {
-      height: 80vh;
+      height: 71vh;
+    }
+  }
+}
+
+@media (min-width: 321px) and (max-width: 400px) {
+  .content:target {
+    height: 51%;
+  }
+  .accordion-tabs {
+    input:checked ~ .tab-content {
+      height: 73vh;
+    }
+  }
+}
+
+@media (min-width: 400px) and (max-width: 480px) {
+  .content:target {
+    height: 50%;
+  }
+  .accordion-tabs {
+    input:checked ~ .tab-content {
+      height: 75vh;
     }
   }
 }
@@ -76,4 +98,3 @@
     }
   }
 }
-

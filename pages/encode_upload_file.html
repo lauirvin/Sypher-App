@@ -11,77 +11,73 @@
 
 <body onload="userUploadCheck();checkFileRadio()">
     <section>
-        <header class="rubric mod-title">
-            <a onclick='javascript:window.history.back()'>
-                <img class="back-btn" src="../media/arrow.png">
+        <form ref="encodeForm" id="encodeForm" action="http://sypher.ddns.net/encode" method='post' encType="multipart/form-data">
+            <header class="rubric mod-title">
+                <a onclick='javascript:window.history.back()'>
+                    <img class="back-btn" src="../media/arrow.png">
+                </a>
+                <h1>Encode</h1>
+                <p></p>
+            </header>
+            <div class="accordion-tabs">
+                <label for="tab-file" class="tab-label">
+                    <div class="label-text">
+                        <p>Upload File</p>
+                    </div>
+                    <div class="label-img">
+                        <img id="accordion-arrow" src="../media/accordion_arrow.png" />
+                    </div>
+                </label>
+                <input onchange="checkFileRadio()" id="tab-file" type="radio" name="tab" checked="true">
+                <div class="tab-content">
+                    <div class="browse-container">
+                        <div class="preview-box mod-file-preview">
+                            <img src="../media/preview_file.png">
+                            <p id="file-name"></p>
+                        </div>
+                        <div class="browse-button">
+                            <label for="upload-file">
+                                <div class="label-icon">
+                                    <img src="../media/upload.png" />
+                                </div>
+                                <p>Upload</p>
+                            </label>
+                            <input onchange="readFileName(this); userUploadCheck()" id="upload-file" type="file" name="file">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-tabs">
+                <label for="tab-img" class="tab-label">
+                    <div class="label-text">
+                        <p>Upload Image</p>
+                    </div>
+                    <div class="label-img">
+                        <img id="accordion-arrow" src="../media/accordion_arrow.png" />
+                    </div>
+                </label>
+                <input onchange="checkImgRadio()" id="tab-img" type="radio" name="tab">
+                <div class="tab-content">
+                    <div class="browse-container">
+                        <div class="preview-box mod-image-preview mod-tab-preview">
+                            <img id="preview-img">
+                        </div>
+                        <div class="browse-button">
+                            <label for="upload-image">
+                                <div class="label-icon">
+                                    <img src="../media/upload.png" />
+                                </div>
+                                <p>Upload</p>
+                            </label>
+                            <input onchange="previewImage(this); userUploadCheck();" id="upload-image" type="file" accept="image/*" name="image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="next-button mod-keppel mod-behind mod-form" id="link" onclick="return false;">
+                <input type="submit" value="NEXT">
             </a>
-            <h1>Encode</h1>
-            <p></p>
-        </header>
-
-        <div class="accordion-tabs">
-            <label for="tab-file" class="tab-label">
-                <div class="label-text">
-                    <p>Upload File</p>
-                </div>
-                <div class="label-img">
-                    <img id="accordion-arrow" src="../media/accordion_arrow.png" />
-                </div>
-            </label>
-            <input onchange="checkFileRadio()" id="tab-file" type="radio" name="tab" checked="true">
-            <div class="tab-content">
-                <div class="browse-container">
-                    <div class="preview-box mod-file-preview">
-                        <img src="../media/preview_file.png">
-                        <p id="file-name"></p>
-                    </div>
-                    <div class="browse-button">
-                        <label for="upload-file">
-                            <div class="label-icon">
-                                <img src="../media/upload.png" />
-                            </div>
-                            <p>Upload</p>
-                        </label>
-                        <form ref="encodeForm" id="encodeForm" action='http://localhost:8080/encode' method='post' encType="multipart/form-data">
-                            <input onchange="readFileName(this); userUploadCheck()" id="upload-file" type="file">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="accordion-tabs">
-            <label for="tab-img" class="tab-label">
-                <div class="label-text">
-                    <p>Upload Image</p>
-                </div>
-                <div class="label-img">
-                    <img id="accordion-arrow" src="../media/accordion_arrow.png" />
-                </div>
-            </label>
-            <input onchange="checkImgRadio()" id="tab-img" type="radio" name="tab">
-            <div class="tab-content">
-                <div class="browse-container">
-                    <div class="preview-box mod-image-preview mod-tab-preview">
-                        <img id="preview-img">
-                    </div>
-                    <div class="browse-button">
-                        <label for="upload-image">
-                            <div class="label-icon">
-                                <img src="../media/upload.png" />
-                            </div>
-                            <p>Upload</p>
-                        </label>
-                        <form ref="encodeForm" id="encodeForm" action='http://localhost:8080/encode' method='post' encType="multipart/form-data">
-                            <input onchange="previewImage(this); userUploadCheck();" id="upload-image" type="file" accept="image/*">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <a href="./encode_download.html" class="next-button mod-keppel mod-behind" id="link" onclick="return false;">
-            <input type="submit" value="NEXT">
-        </a>
+        </form>
     </section>
 </body>
 
