@@ -16,7 +16,7 @@
                 <img class="back-btn" src="../media/arrow.png">
             </a>
             <h1>Decode</h1>
-            <a href="decode_main.html">
+            <a href="/pages/decode_main.html">
                 <img class="home-btn" src="../media/home_btn.png">
             </a>
         </header>
@@ -25,7 +25,7 @@
                 <img id="receive">
             </div>
             <div class="browse-button">
-                <a href="../media/download.png" download>
+                <a id="download_url" href="" download>
                     <label>
                         <div class="label-icon">
                             <img src="../media/download.png" />
