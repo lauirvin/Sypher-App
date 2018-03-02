@@ -18,6 +18,7 @@
             <h1>Decode</h1>
             <p></p>
         </header>
+        <form action="http://sypher.ddns.net/decode" method="post" encType="multipart/form-data">
         <div class="browse-container">
             <div class="preview-box mod-image-preview">
                 <img id="preview-img">
@@ -32,9 +33,10 @@
                 <input onchange="previewImage(this)" id="upload" type="file" accept="image/*">
             </div>
         </div>
-        <a href="./decode_download.html" class="next-button mod-copperfield" id="link" onclick="return false;">
+        <a href="./decode_download.html" class="next-button mod-copperfield mod-form" id="link" onclick="return false;" name="image">
             <input type="submit" value="NEXT">
         </a>
+        </form>
     </section>
 </body>
 
