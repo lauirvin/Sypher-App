@@ -43,7 +43,7 @@ function previewImage(input) {
       imageCheckUpload();
     }
   };
-  reader.readAsDataURL(event.target.files[0]);
+  reader.readAsDataURL(input.files[0]);
 }
 
 function readFileName(input) {
