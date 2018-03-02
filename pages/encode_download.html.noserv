@@ -24,7 +24,7 @@
                     <img id="receive">
                 </div>
                 <div class="browse-button">
-                    <a href="http://sypher.ddns.net/encode" download>
+                    <a id="download_url" href="" download>
                         <label>
                             <div class="label-icon">
                                 <img src="../media/download.png" />

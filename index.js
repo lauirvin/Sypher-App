@@ -2,6 +2,7 @@
 
 'use strict';
 
+const cheerio = require('cheerio');
 const childProcess = require('child_process');
 const express = require('express');
 const fileUpload = require('express-fileupload');
@@ -100,7 +101,10 @@ app.post('/encode', (req, res) => {
             const id = uuid();
             const filePath = path.posix.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png';
             addRouteByPath(id, filePath);
-            res.send('localhost:8080/' + id);
+
+            const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'encode_download.html.noserv')));
+            $('#download_url').attr('href', `/${id}`);
+            res.send($.html());
         }
     });
 });
@@ -143,7 +147,10 @@ app.post('/decode', (req, res) => {
             const id = uuid();
             const filePath = path.posix.join(decodeDir, fs.readdirSync(decodeDir)[0]);
             addRouteByPath(id, filePath);
-            res.send('localhost:8080/' + id);
+
+            const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'decode_download.html.noserv')));
+            $('#download_url').attr('href', `/${id}`);
+            res.send($.html());
         }
     });
 });
