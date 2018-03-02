@@ -1,11 +1,21 @@
-function emptyTextbox() {
+function encodeEmptyTextbox() {
   if (document.getElementById("title" && "textbox").value == "") {
     document.getElementById("link").style.backgroundColor = "#c0c0c0";
   } else {
     document.getElementById("link").style.backgroundColor = "#35B0AB";
     document.getElementById("link").onclick = "return true";
   }
-  window.setTimeout("emptyTextbox();", 1000 * 0.1);
+  window.setTimeout("encodeEmptyTextbox();", 1000 * 0.1);
+}
+
+function decodeEmptyTextbox() {
+  if (document.getElementById("title" && "textbox").value == "") {
+    document.getElementById("link").style.backgroundColor = "#c0c0c0";
+  } else {
+    document.getElementById("link").style.backgroundColor = "#DD8968";
+    document.getElementById("link").onclick = "return true";
+  }
+  window.setTimeout("decodeEmptyTextbox();", 1000 * 0.1);
 }
 
 function emptyInputbox() {
