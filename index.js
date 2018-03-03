@@ -62,7 +62,7 @@ fs.readdirSync(path.posix.join(__dirname, 'pages')).map(page => {
     }
 });
 
-app.post('/encode', (req, res) => {
+app.post('/download_encoded.html', (req, res) => {
     const id = uuid();
     const encodeDir = path.posix.join('/tmp/steg-encode-') + id;
 
@@ -111,7 +111,7 @@ app.post('/encode', (req, res) => {
     });
 });
 
-app.post('/decode', (req, res) => {
+app.post('/download_decoded.html', (req, res) => {
     const id = uuid();
     const decodeDir = path.posix.join('/tmp/steg-decode-') + id;
 
