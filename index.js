@@ -3,13 +3,15 @@
 'use strict';
 
 const cheerio = require('cheerio');
-const childProcess = require('child_process');
+const exec = require('child_process').exec;
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
+const glob = require('glob');
 const lessMiddleware = require('less-middleware');
 const path = require('path');
 const rimraf = require('rimraf');
+const schedule = require('node-schedule');
 const uuid = require('uuid/v1');
 
 const app = express();
@@ -20,11 +22,11 @@ app.use(express.static(path.posix.join(__dirname, 'public')));
 app.use(fileUpload());
 app.use(lessMiddleware(path.posix.join(__dirname, 'public')));
 
-function removeRouteByPath(filePath) {
-    app._router.stack.forEach((route, i, routes) => {
+function removeRouteByRoute(routePath) {
+    app._router.stack.map((route, index, routes) => {
         try {
-            if (route.route.path == filePath) {
-                routes.splice(i, 1);
+            if (route.route.path == routePath) {
+                routes.splice(index, 1);
             }
         } catch (TypeError) {
 
@@ -32,7 +34,7 @@ function removeRouteByPath(filePath) {
     });
 }
 
-function addRouteByPath(id, filePath) {
+function addRouteById(id, filePath) {
     app.get('/' + id, (req, res) => {
         res.download(filePath);
 
@@ -42,7 +44,7 @@ function addRouteByPath(id, filePath) {
             }
         });
 
-        removeRouteByPath('/' + id);
+        removeRouteByRoute('/' + id);
     });
 }
 
@@ -61,7 +63,8 @@ fs.readdirSync(path.posix.join(__dirname, 'pages')).map(page => {
 });
 
 app.post('/encode', (req, res) => {
-    const encodeDir = path.posix.join('/tmp/steg-encode-') + uuid();
+    const id = uuid();
+    const encodeDir = path.posix.join('/tmp/steg-encode-') + id;
 
     fs.mkdir(encodeDir, (error) => {
         if (error) {
@@ -88,7 +91,7 @@ app.post('/encode', (req, res) => {
         }
     });
 
-    childProcess.exec(`${steg} -i '${path.posix.join(encodeDir, image.name)}' -e '${path.posix.join(encodeDir, file.name)}'`, (error, stdout, stderr) => {
+    exec(`${steg} -i '${path.posix.join(encodeDir, image.name)}' -e '${path.posix.join(encodeDir, file.name)}'`, (error, stdout, stderr) => {
         if (error) {
             if (stderr.trim() === 'Error: Failed to store file in image the image is too small') {
                 res.status(500).send(stderr.trim());
@@ -98,9 +101,8 @@ app.post('/encode', (req, res) => {
                 console.log(stdout).trim();
             }
 
-            const id = uuid();
             const filePath = path.posix.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png';
-            addRouteByPath(id, filePath);
+            addRouteById(id, filePath);
 
             const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'encode_download.html.noserv')));
             $('#download_url').attr('href', `/${id}`);
@@ -110,7 +112,8 @@ app.post('/encode', (req, res) => {
 });
 
 app.post('/decode', (req, res) => {
-    const decodeDir = path.posix.join('/tmp/steg-decode-') + uuid();
+    const id = uuid();
+    const decodeDir = path.posix.join('/tmp/steg-decode-') + id;
 
     fs.mkdir(decodeDir, (error) => {
         if (error) {
@@ -130,7 +133,7 @@ app.post('/decode', (req, res) => {
         }
     });
 
-    childProcess.exec(`${steg} -i '${path.posix.join(decodeDir, image.name)}' -d`, (error, stdout, stderr) => {
+    exec(`${steg} -i '${path.posix.join(decodeDir, image.name)}' -d`, (error, stdout, stderr) => {
         if (error) {
             if (stderr.trim() === 'Error: This image does not appear to contain a hidden file') {
                 res.status(500).send(stderr.trim());
@@ -144,9 +147,8 @@ app.post('/decode', (req, res) => {
                 fs.unlinkSync(path.posix.join(decodeDir, image.name));
             }
 
-            const id = uuid();
             const filePath = path.posix.join(decodeDir, fs.readdirSync(decodeDir)[0]);
-            addRouteByPath(id, filePath);
+            addRouteById(id, filePath);
 
             const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'decode_download.html.noserv')));
             $('#download_url').attr('href', `/${id}`);
@@ -155,8 +157,55 @@ app.post('/decode', (req, res) => {
     });
 });
 
+schedule.scheduleJob('0 * * * *', () => {
+    glob(path.posix.join('/tmp', 'steg-*'), (error, files) => {
+        if (error) {
+            throw error;
+        }
+
+        files.map(filePath => {
+            fs.stat(filePath, (error, stats) => {
+                if (error) {
+                    throw error;
+                }
+
+                let timeNow = new Date().getTime();
+                let fileTime = new Date(stats.ctime).getTime();// + 3600000;
+
+                if (timeNow > fileTime) {
+                    rimraf(filePath, (error) => {
+                        if (error) {
+                            throw error;
+                        }
+                    });
+                }
+
+                let route = filePath.split('-');
+                route.shift();
+                route.shift();
+
+                removeRouteByRoute('/' + route.join('-'));
+            });
+        });
+    });
+});
+
 const port = 8080;
 
 app.listen(port, () => {
+    glob('/tmp/steg-*', (error, files) => {
+        if (error) {
+            throw error;
+        }
+
+        files.map(file => {
+            rimraf(file, (error) => {
+                if (error) {
+                    throw error;
+                }
+            });
+        });
+    });
+
     console.log(`app listening on port ${port}`);
 });
