@@ -98,7 +98,7 @@ app.post('/download_encoded.html', (req, res) => {
             }
         } else {
             if (stdout) {
-                console.log(stdout).trim();
+                console.log(stdout.trim());
             }
 
             const filePath = path.posix.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png';
@@ -141,7 +141,7 @@ app.post('/download_decoded.html', (req, res) => {
             }
         } else {
             if (stdout) {
-                console.log(stdout).trim();
+                console.log(stdout.trim());
             }
 
             if (fs.readdirSync(decodeDir).length !== 1) {
