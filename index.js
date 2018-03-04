@@ -105,6 +105,7 @@ app.post('/download_encoded.html', (req, res) => {
             addRouteById(id, filePath);
 
             const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'encode_download.html.noserv')));
+            $('#download_preview').attr('src', `/${id}`);
             $('#download_url').attr('href', `/${id}`);
             res.send($.html());
         }

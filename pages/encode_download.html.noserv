@@ -21,7 +21,7 @@
             </header>
             <div class="browse-container">
                 <div class="preview-box mod-image-preview">
-                    <img id="receive">
+                    <img id="download_preview">
                 </div>
                 <div class="browse-button">
                     <a id="download_url" href="" download>
