@@ -20,7 +20,7 @@
                 </a>
             </header>
             <div class="browse-container">
-                <div class="preview-box mod-image-preview">
+                <div class="preview-box mod-image-preview mod-download-preview" id="preview-box">
                     <img id="download_preview">
                 </div>
                 <div class="browse-button">
