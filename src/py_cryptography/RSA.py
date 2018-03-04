@@ -13,8 +13,8 @@ import random
 import pickle
 
 def isPrime(num):
-	'''Simple function to ascertain whether a given integer is a prime number.
-	returns True if the number is prime, and False otherwise.'''
+    '''Simple function to ascertain whether a given integer is a prime number.
+    returns True if the number is prime, and False otherwise.'''
     if num == 2:
         return True
     if num < 2 or num % 2 == 0:
@@ -25,25 +25,25 @@ def isPrime(num):
     return True
 
 def egcd(a, b):
-	'''Recursive implementation of Euclid's extended algorithm. Expects two integers
-	as input and returns a triple (g,x,y) such that ax + by = g = gcd(a,b)'''
-	if a == 0:
-		return (b,0,1)
-	else:
-		g, x, y = egcd(b % a, a)
-		return (g, y - (b // a) * x, x)
+    '''Recursive implementation of Euclid's extended algorithm. Expects two integers
+    as input and returns a triple (g,x,y) such that ax + by = g = gcd(a,b)'''
+    if a == 0:
+        return (b,0,1)
+    else:
+        g, x, y = egcd(b % a, a)
+        return (g, y - (b // a) * x, x)
 
 def mul_inv(e, n):
-	'''Makes use of the egcd function to recursively find the modular inverse of e. '''
-	g, x, _ = egcd(e,n)
-	if g == 1:
-		return x % n
-	
+    '''Makes use of the egcd function to recursively find the modular inverse of e. '''
+    g, x, _ = egcd(e,n)
+    if g == 1:
+        return x % n
+    
 def RSA_keygen():
-	'''Function for generating a new set of RSA keys. Generates two large prime numbers
-	and calls mul_inv to generate the decryption key d. Output is stored as pickled tuples
-	pubkey and privkey respectively for the public and private components of the key.'''
-    primes = [i for i in range (9900000,10000000) if isPrime(i)]-
+    '''Function for generating a new set of RSA keys. Generates two large prime numbers
+    and calls mul_inv to generate the decryption key d. Output is stored as pickled tuples
+    pubkey and privkey respectively for the public and private components of the key.'''
+    primes = [i for i in range (9900000,10000000) if isPrime(i)]
     p = random.choice(primes)
     primes.remove(p)
     q = random.choice(primes)
@@ -67,8 +67,8 @@ def RSA_keygen():
     return None
 
 def RSA_encode(message,keys):
-	'''Encodes a message using RSA public key cryptography. Output is stored as a pickled list in the
-	file message.b for later usage.'''
+    '''Encodes a message using RSA public key cryptography. Output is stored as a pickled list in the
+    file message.b for later usage.'''
     with open(keys,"rb") as f:
         key_tup = pickle.load(f)
 
@@ -81,8 +81,8 @@ def RSA_encode(message,keys):
     return None
 
 def RSA_decode(message,keys):
-	'''Decodes a message encrypted using RSA. Output is returned as a string containing the plaintext
-	message.'''
+    '''Decodes a message encrypted using RSA. Output is returned as a string containing the plaintext
+    message.'''
     with open(keys,"rb") as f:
         key_tup = pickle.load(f)
 
@@ -96,5 +96,5 @@ def RSA_decode(message,keys):
     return plaintext
 
 if __name__ == '__main__':
-	RSA_keygen()
+    RSA_keygen()
     
