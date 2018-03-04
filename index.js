@@ -9,6 +9,7 @@ const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const glob = require('glob');
 const lessMiddleware = require('less-middleware');
+const mime = require('mime');
 const path = require('path');
 const rimraf = require('rimraf');
 const schedule = require('node-schedule');
@@ -104,8 +105,11 @@ app.post('/download_encoded.html', (req, res) => {
             const filePath = path.posix.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png';
             addRouteById(id, filePath);
 
+            const encodedImage = fs.readFileSync(filePath);
+            const encodedImageMimeType = mime.getType(filePath);
+
             const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'encode_download.html.noserv')));
-            $('#download_preview').attr('src', `/${id}`);
+            $('#download_preview').attr('src', `data:${encodedImageMimeType};base64,${new Buffer(encodedImage).toString('base64')}`);
             $('#download_url').attr('href', `/${id}`);
             res.send($.html());
         }
@@ -151,7 +155,11 @@ app.post('/download_decoded.html', (req, res) => {
             const filePath = path.posix.join(decodeDir, fs.readdirSync(decodeDir)[0]);
             addRouteById(id, filePath);
 
+            const encodedImage = fs.readFileSync(filePath);
+            const encodedImageMimeType = mime.getType(filePath);
+
             const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'decode_download.html.noserv')));
+            $('#download_preview').attr('src', `data:${encodedImageMimeType};base64,${new Buffer(encodedImage).toString('base64')}`);
             $('#download_url').attr('href', `/${id}`);
             res.send($.html());
         }
@@ -182,6 +190,7 @@ schedule.scheduleJob('0 * * * *', () => {
                 }
 
                 let route = filePath.split('-');
+
                 route.shift();
                 route.shift();
 
