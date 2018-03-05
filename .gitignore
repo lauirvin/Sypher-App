@@ -170,6 +170,9 @@ public/js/less.js
 # Vscode
 .vscode
 
-#RSA pycache/message/keys
-src/py_cryptography/keys.txt
-src/py_cryptography/message.txt
+#RSA pycache/message/keys/unittest files
+src/py_cryptography/public.b
+src/py_cryptography/private.b
+src/py_cryptography/message.b
+src/py_cryptography/shakespeare.txt
+src/py_cryptography/test_essay.txt
