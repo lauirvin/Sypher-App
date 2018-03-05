@@ -164,6 +164,11 @@ src/steganography/bin/*
 src/steganography/build/*
 src/steganography/src/optparse.hpp
 
+src/steganography/test/bin/*
+src/steganography/test/build/*
+src/steganography/test/test_files/steg-*
+src/steganography/test/src/catch.hpp
+
 # Less - This file can now be fetched using install.bat/install.sh
 public/js/less.js
 

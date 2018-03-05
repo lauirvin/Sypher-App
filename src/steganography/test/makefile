@@ -1,4 +1,4 @@
-TARGET = steganography
+TARGET = tests
 
 CC=g++
 CFLAGS = -std=c++11 $(shell pkg-config --cflags opencv)
@@ -32,23 +32,17 @@ $(OBJ_LST) : $(BUILD_DIR)/%.o : $(SRC_DIR)/%.$(SRC_EXT)
 
 .PHONY: configure
 configure:
-	@curl https://raw.githubusercontent.com/myint/optparse/master/optparse.h --silent --create-dirs --output src/optparse.hpp
-
-.PHONY: test
-test:
-	@make --silent -C test configure
-	@make --silent -C test
+	@curl https://raw.githubusercontent.com/CatchOrg/Catch2/master/single_include/catch.hpp --silent --create-dirs --output src/catch.hpp
 
 .PHONY: clean
 clean:
 	@$(RM) $(OBJ_LST)
-	@make --silent -C test clean
+	@$(RM) test_files/steg-*
 	@echo "Cleanup complete!"
 
 .PHONY: remove
-remove: clean
-	@$(RM) "src/optparse.hpp"
+remove:
+	@$(RM) "src/catch.hpp"
 	@$(RM) $(BUILD_DIR)
 	@$(RM) $(BIN_DIR)
-	@make --silent -C test remove
 	@echo "Executable removed!"

@@ -1,5 +1,8 @@
 #include "steganography.hpp"
 
+#ifndef LSB_HPP
+#define LSB_HPP
+
 class lsb: public steganography {
     public:
         using steganography::steganography;
@@ -14,3 +17,5 @@ class lsb: public steganography {
         inline unsigned char get_lsb(const unsigned char&);
         inline void set_lsb(unsigned char*, const bool&);
 };
+
+#endif
