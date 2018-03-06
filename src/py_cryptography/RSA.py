@@ -46,9 +46,9 @@ def RSA_keygen():
 	and calls mul_inv to generate the decryption key d. Output is stored as pickled tuples
 	pubkey and privkey respectively for the public and private components of the key.'''
 	primes = [i for i in range (9900000,10000000) if isPrime(i)]
-	p = random.choice(primes)
+	p = random.SystemRandom(primes)
 	primes.remove(p)
-	q = random.choice(primes)
+	q = random.SystemRandom(primes)
 	n = p * q    
 	e = 65537
 	#phi is euler's totient - the count of positive integers up to n that are coprime to n.
@@ -126,7 +126,7 @@ class RSA_tests(unittest.TestCase):
 #Shakespeare test code commented - requires utf-8 encoding in parse_txt
 '''	
 	def test_4(self):
-		print('Shakespeare test running... ')
+                print('Shakespeare test running... ')
 		RSA_encode(parse_txt('shakespeare.txt'),'public.b')
 
 	def test_5(self):
