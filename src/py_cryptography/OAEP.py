@@ -2,15 +2,16 @@ from hashlib import sha256
 import binascii
 from random import SystemRandom
 
+errors = 'surrogatepass'
+
 def text_to_bits(message,encoding = 'utf-8'):
-	int_bits = int.from_bytes(message.encode(encoding), 'big')
+	int_bits = int.from_bytes(message.encode(encoding,errors), 'big')
 	bits = f'{int_bits:b}'
-	return bits.zfill(8 * (len(bits) + 7) // 8)
+	return bits.zfill(8 * ((len(bits) + 7) // 8))
 
 def bits_to_text(bits, encoding = 'utf-8'):
 	n = int(bits, 2)
-	message = n.to_bytes((n.bit_length() + 7) // 8, 'big').decode(encoding)
-	return message
+	return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode('utf-8',errors).rstrip(' \t\r\n\0')
 
 def pad(message, k0 = 256, n = 1024):
 	'''Create 2 oracles using sha-256 hashing algorithm'''
@@ -18,8 +19,7 @@ def pad(message, k0 = 256, n = 1024):
 	oracle2 = sha256()
 
 	'''Generate a random bit-string of length k0'''
-	int_bits = SystemRandom().getrandbits(k0)
-	rand_bits = f'{int_bits:b}'.zfill(k0)
+	rand_bits = format(SystemRandom().getrandbits(k0), '0256b')
 
 	'''convert message to binary'''
 	bitmsg = text_to_bits(message)
@@ -32,12 +32,10 @@ def pad(message, k0 = 256, n = 1024):
 	'''apply hashing oracles as required'''
 
 	oracle1.update(rand_bits.encode('utf-8'))
-	x_int = int(bitmsg , 2) ^ int(oracle1.hexdigest(), 16)
-	x = f'{x_int:b}'.zfill(768)
+	x = format(int(bitmsg , 2) ^ int(oracle1.hexdigest(), 16), '0768b')	
 	
 	oracle2.update(x.encode('utf-8'))
-	y_int = int(oracle2.hexdigest(), 16) ^ int(rand_bits, 2)
-	y = f'{y_int:b}'.zfill(k0)
+	y = format(int(oracle2.hexdigest(), 16) ^ int(rand_bits, 2), '0256b')
 
 	return x + y
 
@@ -49,12 +47,10 @@ def unpad(message, k0 = 256):
 	y = message[768:]
 
 	oracle2.update(x.encode('utf-8'))
-	r_int = int(y,2) ^ int(oracle2.hexdigest(), 16)
-	r = f'{r_int:b}'.zfill(k0)
+	r = format(int(y,2) ^ int(oracle2.hexdigest(), 16), '0256b')
 
 	oracle1.update(r.encode('utf-8'))
-	msg_int = int(x,2) ^ int(oracle1.hexdigest(), 16)
-	msg = f'{msg_int:b}'.zfill(768)
+	msg = format(int(x,2) ^ int(oracle1.hexdigest(), 16), '0768b')
 
 	return bits_to_text(msg)
 
