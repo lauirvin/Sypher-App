@@ -179,7 +179,7 @@ schedule.scheduleJob('0 * * * *', () => {
                 }
 
                 let timeNow = new Date().getTime();
-                let fileTime = new Date(stats.ctime).getTime();// + 3600000;
+                let fileTime = new Date(stats.ctime).getTime() + 3600000;
 
                 if (timeNow > fileTime) {
                     rimraf(filePath, (error) => {
