@@ -2,7 +2,7 @@
 
 'use strict';
 
-const cheerio = require('cheerio');
+const es6Renderer = require('express-es6-template-engine');
 const exec = require('child_process').exec;
 const express = require('express');
 const fileUpload = require('express-fileupload');
@@ -10,7 +10,7 @@ const fs = require('fs');
 const glob = require('glob');
 const lessMiddleware = require('less-middleware');
 const mime = require('mime');
-const path = require('path');
+const path = require('path').posix;
 const rimraf = require('rimraf');
 const schedule = require('node-schedule');
 const uuid = require('uuid/v1');
@@ -19,17 +19,24 @@ const app = express();
 
 const steg = 'src/steganography/bin/steganography';
 
-app.use(express.static(path.posix.join(__dirname, 'public')));
+app.engine('html', es6Renderer);
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
-app.use(lessMiddleware(path.posix.join(__dirname, 'public')));
+app.use(lessMiddleware(path.join(__dirname, 'public')));
+
+app.set('view engine', 'html');
 
 function removeRouteByRoute(routePath) {
-    app._router.stack.map((route, index, routes) => {
+    app._router.stack.map((route, index) => {
+        if (route.path == routePath) {
+            app._router.stack.splice(index, 1);
+        }
+
         try {
             if (route.route.path == routePath) {
-                routes.splice(index, 1);
+                app._router.stack.splice(index, 1);
             }
-        } catch (TypeError) {
+        } catch (Typeerr) {
 
         }
     });
@@ -49,15 +56,15 @@ function addRouteById(id, filePath) {
     });
 }
 
-fs.readdirSync(path.posix.join(__dirname, 'pages')).map(page => {
+fs.readdirSync(path.join(__dirname, 'pages', 'static')).map(page => {
     if (page.split('.').pop() === 'html') {
         if (page === 'index.html') {
             app.get('/', (req, res) => {
-                res.sendFile(path.posix.join(__dirname, 'pages', page));
+                res.sendFile(path.join(__dirname, 'pages', 'static',page));
             });
         } else {
-            app.get(path.posix.join('/', 'pages', page), (req, res) => {
-                res.sendFile(path.posix.join(__dirname, 'pages', page));
+            app.get(path.join('/', 'pages', page), (req, res) => {
+                res.sendFile(path.join(__dirname, 'pages', 'static', page));
             });
         }
     }
@@ -65,7 +72,7 @@ fs.readdirSync(path.posix.join(__dirname, 'pages')).map(page => {
 
 app.post('/download_encoded.html', (req, res) => {
     const id = uuid();
-    const encodeDir = path.posix.join('/tmp/steg-encode-') + id;
+    const encodeDir = path.join('/tmp/steg-encode-') + id;
 
     fs.mkdir(encodeDir, (error) => {
         if (error) {
@@ -80,19 +87,19 @@ app.post('/download_encoded.html', (req, res) => {
         return res.status(500).send('Failed to retrieve files');
     }
 
-    image.mv(path.posix.join(encodeDir, image.name), (error) => {
+    image.mv(path.join(encodeDir, image.name), (error) => {
         if (error) {
             throw error;
         }
     });
 
-    file.mv(path.posix.join(encodeDir, file.name), (error) => {
+    file.mv(path.join(encodeDir, file.name), (error) => {
         if (error) {
             throw error;
         }
     });
 
-    exec(`${steg} -i '${path.posix.join(encodeDir, image.name)}' -e '${path.posix.join(encodeDir, file.name)}'`, (error, stdout, stderr) => {
+    exec(`${steg} -i '${path.join(encodeDir, image.name)}' -e '${path.join(encodeDir, file.name)}'`, (error, stdout, stderr) => {
         if (error) {
             if (stderr.trim() === 'Error: Failed to store file in image the image is too small') {
                 res.status(500).send(stderr.trim());
@@ -102,23 +109,25 @@ app.post('/download_encoded.html', (req, res) => {
                 console.log(stdout.trim());
             }
 
-            const filePath = path.posix.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png';
+            const filePath = path.join(encodeDir, 'steg-' + image.name.substr(0, image.name.lastIndexOf('.'))) + '.png';
             addRouteById(id, filePath);
 
             const encodedImage = fs.readFileSync(filePath);
             const encodedImageMimeType = mime.getType(filePath);
 
-            const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'encode_download.html.noserv')));
-            $('#download_preview').attr('src', `data:${encodedImageMimeType};base64,${new Buffer(encodedImage).toString('base64')}`);
-            $('#download_url').attr('href', `/${id}`);
-            res.send($.html());
+            res.render(path.join(__dirname, 'pages', 'dynamic', 'encode_download.html'), {
+                locals: {
+                    imagePreview: `data:${encodedImageMimeType};base64,${new Buffer(encodedImage).toString('base64')}`,
+                    downloadUrl: `/${id}`
+                }
+            });
         }
     });
 });
 
 app.post('/download_decoded.html', (req, res) => {
     const id = uuid();
-    const decodeDir = path.posix.join('/tmp/steg-decode-') + id;
+    const decodeDir = path.join('/tmp/steg-decode-') + id;
 
     fs.mkdir(decodeDir, (error) => {
         if (error) {
@@ -132,13 +141,13 @@ app.post('/download_decoded.html', (req, res) => {
         return res.status(500).send('Failed to retrieve files');
     }
 
-    image.mv(path.posix.join(decodeDir, image.name), (error) => {
+    image.mv(path.join(decodeDir, image.name), (error) => {
         if (error) {
             throw error;
         }
     });
 
-    exec(`${steg} -i '${path.posix.join(decodeDir, image.name)}' -d`, (error, stdout, stderr) => {
+    exec(`${steg} -i '${path.join(decodeDir, image.name)}' -d`, (error, stdout, stderr) => {
         if (error) {
             if (stderr.trim() === 'Error: This image does not appear to contain a hidden file') {
                 res.status(500).send(stderr.trim());
@@ -149,25 +158,27 @@ app.post('/download_decoded.html', (req, res) => {
             }
 
             if (fs.readdirSync(decodeDir).length !== 1) {
-                fs.unlinkSync(path.posix.join(decodeDir, image.name));
+                fs.unlinkSync(path.join(decodeDir, image.name));
             }
 
-            const filePath = path.posix.join(decodeDir, fs.readdirSync(decodeDir)[0]);
+            const filePath = path.join(decodeDir, fs.readdirSync(decodeDir)[0]);
             addRouteById(id, filePath);
 
             const encodedImage = fs.readFileSync(filePath);
             const encodedImageMimeType = mime.getType(filePath);
 
-            const $ = cheerio.load(fs.readFileSync(path.posix.join('pages', 'decode_download.html.noserv')));
-            $('#download_preview').attr('src', `data:${encodedImageMimeType};base64,${new Buffer(encodedImage).toString('base64')}`);
-            $('#download_url').attr('href', `/${id}`);
-            res.send($.html());
+            res.render(path.join(__dirname, 'pages', 'dynamic', 'decode_download.html'), {
+                locals: {
+                    imagePreview: `data:${encodedImageMimeType};base64,${new Buffer(encodedImage).toString('base64')}`,
+                    downloadUrl: `/${id}`
+                }
+            });
         }
     });
 });
 
 schedule.scheduleJob('0 * * * *', () => {
-    glob(path.posix.join('/tmp', 'steg-*'), (error, files) => {
+    glob(path.join('/tmp', 'steg-*'), (error, files) => {
         if (error) {
             throw error;
         }
