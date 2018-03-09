@@ -175,7 +175,7 @@ body {
     bottom: 0;
     position: fixed;
     width: 100%;
-    margin: 0;
+    margin: 0;  
     -moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
@@ -227,10 +227,9 @@ body {
     text-align: center;
   }
   .browse-carousel-container {
-    overflow-x: scroll;
+    overflow-x: hidden;
     overflow-y: hidden;
     white-space: nowrap;
-    height: 100vh;
     width: 100vw;
     text-align: center;
     margin: 0 auto;
@@ -239,7 +238,7 @@ body {
       display: inline-block;
       vertical-align: middle;
       width: 100vw;
-      height: 100vh;
+      height: 50%;
       background: white;
     }
   }

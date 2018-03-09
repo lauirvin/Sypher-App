@@ -15,7 +15,7 @@
             <a id="back-btn" onclick='javascript:window.history.back()'>
                 <img class="back-btn" src="../media/arrow.png">
             </a>
-            <a id="back-scroll" onclick='scrollBack()'>
+            <a id="back-scroll" onclick="scrollBack()">
                 <img class="back-btn" src="../media/arrow.png">
             </a>
             <h1>Encode</h1>
@@ -23,8 +23,8 @@
         </header>
         <form ref="encodeForm" id="encodeForm" action="/download_encoded.html" method='post' encType="multipart/form-data">
             <div class="browse-carousel-container">
-                <div class="browse-carousel-card">
-                    <div id="1" class="browse-container">
+                <div id="1" class="browse-carousel-card">
+                    <div class="browse-container">
                         <div class="preview-box mod-file-preview">
                             <img src="../media/preview_file.png">
                             <p id="file-name"></p>
@@ -40,8 +40,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="browse-carousel-card">
-                    <div id="2" class="browse-container">
+                <div id="2" class="browse-carousel-card">
+                    <div class="browse-container">
                         <div class="preview-box mod-image-preview">
                             <img id="preview-img">
                         </div>
