@@ -11,19 +11,22 @@ m == c^d (mod n)
 '''
 
 import math
-import random
-import pickle
-import unittest
-import time
 import os
+import pickle
+import random
+import unittest
 
 
 class RSA:
-    def __init__(self, outputDir=None):
-        if outputDir is None:
-            outputDir = os.path.dirname(os.path.realpath(__file__))
+    def __init__(self, keyOutputDir=None, messageOutputDir=None):
+        if keyOutputDir is None:
+            keyOutputDir = os.path.dirname(os.path.realpath(__file__))
 
-        self.outputDir = outputDir
+        if messageOutputDir is None:
+            messageOutputDir = os.path.dirname(os.path.realpath(__file__))
+
+        self.keyOutputDir = keyOutputDir
+        self.messageOutputDir = messageOutputDir
 
     def isPrime(self, num):
         '''Simple function to ascertain whether a given integer is a prime number.
@@ -58,17 +61,7 @@ class RSA:
         pubkey and privkey respectively for the public and private components of the key.'''
         primes = [i for i in range(9900000, 10000000) if self.isPrime(i)]
 
-        try:
-            p = random.SystemRandom(primes)
-        except TypeError:
-            p = random.choice(primes)
-
-        primes.remove(p)
-
-        try:
-            q = random.SystemRandom(primes)
-        except TypeError:
-            q = random.choice(primes)
+        p, q = self.pick_primes(primes)
 
         n = p * q
         e = 65537
@@ -81,10 +74,10 @@ class RSA:
         pubkey = (n, e)
         privkey = (n, d)
 
-        with open(self.outputDir + "/public.b", "wb") as f:
+        with open(self.keyOutputDir + "/public.b", "wb") as f:
                 pickle.dump(pubkey, f)
 
-        with open(self.outputDir + "/private.b", "wb") as f:
+        with open(self.keyOutputDir + "/private.b", "wb") as f:
                 pickle.dump(privkey, f)
 
         return None
@@ -98,7 +91,7 @@ class RSA:
         n, e = key_tup
 
         code = [pow(ord(i), e, n) for i in message]
-        with open("message.b", "wb") as f:
+        with open(self.messageOutputDir + "/message.b", "wb") as f:
                 pickle.dump(code, f)
 
         return None
@@ -118,32 +111,35 @@ class RSA:
         plaintext = ''.join(plaintext_list)
         return plaintext
 
-    def parse_txt(self, file):
-        with open(file, "r") as f:
-                string = f.read()
+    @classmethod
+    def pick_primes(cls, primeList):
+        ''' Pick two prime numbers from prime number list and return then as a tuple '''
+        primes = [0, 0]
 
-        return string
+        for i in range(2):
+            try:
+                primes[i] = random.SystemRandom(primeList)
+            except TypeError:
+                primes[i] = random.choice(primeList)
+
+            primeList.remove(primes[i])
+
+        return tuple(primes)
 
 
 class RSA_tests(unittest.TestCase):
     def setUp(self):
-        self.rsa = RSA()
-        self._started_at = time.time()
-
-    def tearDown(self):
-        elapsed = time.time() - self._started_at
-        print('{} ({}s'.format(self.id(), elapsed))
+        self.rsa = RSA('test', 'test')
 
     def test_1(self):
         self.rsa.RSA_keygen()
 
-    def test_2(self):
-        print('Essay encode test running... ')
-        self.rsa.RSA_encode(self.rsa.parse_txt('test_essay.txt'), 'public.b')
+    def test_shakespeare(self):
+        with open('test/shakespeare.txt') as file:
+            self.rsa.RSA_encode(file.read(), 'test/public.b')
 
-    def test_3(self):
-        print('Essay decode test running... ')
-        self.rsa.RSA_decode('message.b', 'private.b')
+        with open('test/shakespeare.txt') as file:
+            self.assertEqual(file.read(), self.rsa.RSA_decode('test/message.b', 'test/private.b'))
 
 
 if __name__ == '__main__':

@@ -181,3 +181,7 @@ src/py_cryptography/private.b
 src/py_cryptography/message.b
 src/py_cryptography/shakespeare.txt
 src/py_cryptography/test_essay.txt
+src/py_cryptography/test/public.b
+src/py_cryptography/test/private.b
+src/py_cryptography/test/message.b
+src/py_cryptography/test/shakespeare.txt
