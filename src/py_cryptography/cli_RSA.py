@@ -7,11 +7,14 @@ def command_line():
     parser = argparse.ArgumentParser(description='Command line interface for RSA encryption')
     parser.add_argument('-n','--new-keys', action='store_true', help='Whether or not new keys should be generated.')
     parser.add_argument('-m','--message', action='store', type=str, help='Message to be encoded.')
-    parser.add_argument('-c','--coded-message', action='store', type=str, help='Location of message to be decoded.')    
+    parser.add_argument('-c','--coded-message', action='store', type=str, help='Location of message to be decoded.')
+    parser.add_argument('-s','--store-keys', action='store', type=str, help='Desired file location for output of keys')
     arguments = parser.parse_args()
 
     if arguments.new_keys:
-        RSA_keygen()
+        rsa = RSA(arguments.store_keys)
+        print(arguments.store_keys)
+        rsa.RSA_keygen()
 
     if arguments.message:
         coded = RSA_encode(arguments.message,"public.b")     
