@@ -25,7 +25,7 @@ $(BIN_DIR)/$(TARGET) : $(OBJ_LST)
 	@$(LINKER) $(OBJ_LST) $(LFLAGS) -o $@
 	@echo "Successfully linked '"$(TARGET)"'!"
 
-$(OBJ_LST) : $(BUILD_DIR)/%.o : $(SRC_DIR)/%.$(SRC_EXT)
+$(OBJ_LST) : $(BUILD_DIR)/%.o : $(SRC_DIR)/%.$(SRC_EXT) $(INC_LST)
 	@$(MKDIR) $(BUILD_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "Compiled '"$<"' to '"$@"' successfully!"
