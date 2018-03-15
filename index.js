@@ -198,14 +198,14 @@ schedule.scheduleJob('0 * * * *', () => {
                             throw error;
                         }
                     });
+
+                    let route = filePath.split('-');
+
+                    route.shift();
+                    route.shift();
+
+                    removeRouteByRoute('/' + route.join('-'));
                 }
-
-                let route = filePath.split('-');
-
-                route.shift();
-                route.shift();
-
-                removeRouteByRoute('/' + route.join('-'));
             });
         });
     });
