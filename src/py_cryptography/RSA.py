@@ -15,6 +15,7 @@ import os
 import pickle
 import random
 import unittest
+from OAEP import *
 
 
 class RSA:
@@ -90,7 +91,10 @@ class RSA:
 
         n, e = key_tup
 
-        code = [pow(ord(i), e, n) for i in message]
+        message_bits = pad(message)
+        int_msg = int(message_bits, 2)
+        code = pow(int_msg, e, n)
+
         with open(self.messageOutputDir + "/message.b", "wb") as f:
                 pickle.dump(code, f)
 
@@ -107,8 +111,10 @@ class RSA:
         with open(message, "rb") as f:
                 code = pickle.load(f)
 
-        plaintext_list = [chr(pow(i, d, n)) for i in code]
-        plaintext = ''.join(plaintext_list)
+        int_msg = pow(code, d, n)
+        message_bits = f'{int_msg:b}'.zfill(1024)
+        plaintext = unpad(message_bits)
+
         return plaintext
 
     @classmethod

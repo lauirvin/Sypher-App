@@ -53,7 +53,3 @@ def unpad(message, k0 = 256):
 	msg = format(int(x,2) ^ int(oracle1.hexdigest(), 16), '0768b')
 
 	return bits_to_text(msg)
-
-padded = pad('hello there')
-unpadded = unpad(padded)
-print(unpadded)
